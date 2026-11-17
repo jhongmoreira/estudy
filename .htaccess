@@ -1,0 +1,9 @@
+# Bloqueia o acesso web a tudo fora de public/ (o subdomínio aponta para public/).
+Options -Indexes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^ - [F,L]
+</IfModule>
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>
