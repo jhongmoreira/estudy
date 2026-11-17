@@ -2,6 +2,10 @@
 
 Reaproveita do Financee: `laravel-notification-channels/webpush`, `VapidKeys` (gera `storage/app/private/vapid.json` sozinho), handlers do `sw.js`, tabela `push_subscriptions`, fila `database` processada pelo cron.
 
+> **Status (17/11/2026):** implementada. `notifications:dispatch` roda a cada 15 min; cada aviso sai dentro de 1 h após o horário,
+> uma vez por dia (`notification_logs`). Revisões e prazos do dia às 8h, véspera às 19h, sequência às 21h, lembrete diário no horário
+> escolhido (padrão 19h). Convite para ativar na tela Hoje (dispensável). Chaves VAPID geradas sozinhas em `storage/app/private/vapid.json`.
+
 ## 8.1 Avisos
 | Aviso | Quando | Texto (exemplo) |
 |---|---|---|

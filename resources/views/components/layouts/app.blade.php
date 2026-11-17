@@ -9,6 +9,7 @@
     $user = auth()->user();
     // Contador de revisões vencidas (o menu é renderizado a cada tela para ficar atualizado)
     $dueReviews = \App\Models\Review::due()->count();
+    $unread = $user->unreadNotifications()->count();
 @endphp
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -43,7 +44,11 @@
                 @endforeach
             </nav>
 
-            <a href="{{ route('profile') }}" wire:navigate class="mt-auto flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sheet-2">
+            <a href="{{ route('notifications') }}" wire:navigate wire:current="!bg-pen-soft !text-pen" class="mt-auto flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-ink-soft hover:bg-sheet-2 hover:text-ink">
+                <x-icon name="bell" /> <span class="flex-1">Notificações</span>
+                @if ($unread > 0)<span class="rounded-full bg-pen px-2 py-0.5 text-xs font-bold text-white dark:text-[#14161c]">{{ $unread }}</span>@endif
+            </a>
+            <a href="{{ route('profile') }}" wire:navigate class="mt-2 flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sheet-2">
                 <x-ui.avatar :user="$user" class="size-9 text-sm" />
                 <span class="min-w-0">
                     <span class="block truncate text-sm font-semibold">{{ $user->name }}</span>
