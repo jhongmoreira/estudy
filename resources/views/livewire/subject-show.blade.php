@@ -179,6 +179,16 @@
             </div>
             <x-ui.textarea label="Anotações" name="topicNotes" wire:model="topicNotes" rows="5" placeholder="Resumo, dúvidas, fórmulas, páginas..." />
             @if ($topicId)
+                <div class="rounded-2xl bg-sheet-2 p-3">
+                    <p class="flex items-center gap-2 text-sm font-semibold"><x-icon name="review" class="size-4" />
+                        @if ($topicReview) Próxima revisão: {{ $topicReview->due_on->isToday() ? 'hoje' : $topicReview->due_on->translatedFormat('j \d\e M') }} @else Sem revisão agendada @endif
+                    </p>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        @foreach (['today' => 'Hoje', 'tomorrow' => 'Amanhã', 'week' => 'Em 1 semana'] as $k => $l)
+                            <button type="button" wire:click="reviewTopicOn('{{ $k }}')" class="tap rounded-full bg-sheet px-3 py-1 text-xs font-semibold text-pen">{{ $topicReview ? 'Mover p/ ' : 'Revisar ' }}{{ mb_strtolower($l) }}</button>
+                        @endforeach
+                    </div>
+                </div>
                 <x-ui.button :href="route('study', ['topico' => $topicId])" variant="marker" icon="play" class="w-full">Estudar este tópico</x-ui.button>
             @endif
             <div class="flex gap-2">
