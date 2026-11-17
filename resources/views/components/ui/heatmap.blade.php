@@ -6,6 +6,7 @@
     $start = $end->subDays($weeks * 7 - 1);
     $w = $weeks * ($cell + $gap) - $gap;
     $h = 7 * ($cell + $gap) - $gap;
+    $pad = 2; // margem para o contorno do dia de hoje não ser cortado nas bordas
     $fill = function (int $s) use ($goal, $min) {
         return match (true) {
             $s <= 0 => 'var(--sheet-2)',
@@ -15,7 +16,7 @@
         };
     };
 @endphp
-<svg viewBox="0 0 {{ $w }} {{ $h }}" width="{{ round($w * $scale) }}" height="{{ round($h * $scale) }}" {{ $attributes->merge(['class' => 'block h-auto max-w-full']) }} role="img" aria-label="Calendário de constância das últimas {{ $weeks }} semanas">
+<svg viewBox="-{{ $pad }} -{{ $pad }} {{ $w + 2 * $pad }} {{ $h + 2 * $pad }}" width="{{ round(($w + 2 * $pad) * $scale) }}" height="{{ round(($h + 2 * $pad) * $scale) }}" {{ $attributes->merge(['class' => 'block h-auto max-w-full']) }} role="img" aria-label="Calendário de constância das últimas {{ $weeks }} semanas">
     @for ($i = 0; $i < $weeks * 7; $i++)
         @php
             $d = $start->addDays($i);
