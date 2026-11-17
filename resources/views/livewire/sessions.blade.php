@@ -18,6 +18,7 @@
     </div>
 
     <div class="mb-6 flex items-baseline gap-2 rounded-2xl bg-sheet-2 px-4 py-3">
+        <a href="{{ route('export.sessions', $period !== 'all' ? ['de' => now()->subDays((int) $period - 1)->toDateString()] : []) }}" class="order-last ml-auto text-sm font-semibold text-pen">Exportar CSV</a>
         <span class="font-display text-2xl font-bold">{{ \App\Support\Duration::human($total) }}</span>
         <span class="text-sm text-ink-soft">em {{ $count }} {{ $count === 1 ? 'sessão' : 'sessões' }}</span>
     </div>

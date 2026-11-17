@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FormationController;
 use App\Http\Controllers\PushSubscriptionController;
 use App\Http\Controllers\ServiceWorkerController;
@@ -27,6 +28,8 @@ Route::middleware(['auth', EnsureOnboarded::class])->group(function () {
     Route::post('/push/assinar', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
     Route::post('/push/cancelar', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
     Route::get('/formacao', Livewire\Formation::class)->name('formation');
+    Route::get('/exportar/backup.json', [ExportController::class, 'backup'])->name('export.backup');
+    Route::get('/exportar/sessoes.csv', [ExportController::class, 'sessions'])->name('export.sessions');
     Route::get('/formacao/formacao.csv', [FormationController::class, 'csv'])->name('formation.csv');
     Route::get('/formacao/certificado/{course}', [FormationController::class, 'certificate'])->name('formation.certificate');
     Route::get('/revisoes', Livewire\Reviews::class)->name('reviews');

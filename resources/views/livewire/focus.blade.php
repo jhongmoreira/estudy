@@ -1,5 +1,6 @@
 @php $color = $timer?->subject->color ?? $timer?->subject->course->color ?? '#3047c9'; @endphp
 <div class="flex flex-1 flex-col py-6"
+     @keydown.window.space="if (! ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes($event.target.tagName)) { $event.preventDefault(); paused ? $wire.resume() : $wire.pause() }"
      x-data="timerClock($wire, @js($pomodoroConfig), {{ $timer?->pomodoro ? 'true' : 'false' }}, {{ $todaySeconds }}, {{ $goalSeconds }}, @js($timer?->subject->name ?? ''))">
     @if ($timer)
         {{-- Topo --}}
@@ -43,7 +44,7 @@
                     <x-icon name="stop" class="size-5" /> Encerrar
                 </button>
             </div>
-            <p class="mt-4 text-center text-xs text-ink-soft">Pode sair desta tela ou fechar o app: o tempo continua contando.</p>
+            <p class="mt-4 text-center text-xs text-ink-soft">Pode sair desta tela ou fechar o app: o tempo continua contando.<span class="hidden lg:inline"> Barra de espaço pausa/retoma.</span></p>
         </div>
 
         {{-- Anotações rápidas --}}
