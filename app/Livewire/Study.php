@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\StudySession;
 use App\Models\Subject;
 use App\Models\Topic;
+use App\Services\CycleService;
 use App\Services\TimerService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
@@ -114,7 +115,10 @@ class Study extends Component
         $last = StudySession::with(['subject.course', 'topic'])->latest('date')->latest('id')->first();
         $subject = $this->subjectId ? Subject::with('course')->find($this->subjectId) : null;
 
+        $cycle = app(CycleService::class)->active();
+
         return view('livewire.study', [
+            'cycleItem' => $cycle?->currentItem(),
             'courses' => $courses,
             'last' => $last,
             'subject' => $subject,

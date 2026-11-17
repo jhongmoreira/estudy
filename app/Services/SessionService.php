@@ -16,7 +16,7 @@ use Illuminate\Validation\Rule;
 /** Gravação de sessões de estudo, pelo cronômetro ou manual (docs/especificacao.md §3.2–3.3). */
 class SessionService
 {
-    public function __construct(private ReviewService $reviews) {}
+    public function __construct(private ReviewService $reviews, private CycleService $cycles) {}
 
     /**
      * @param  array<string, mixed>  $input  subject_id, topic_id?, date, started_at?, duration_seconds, kind,
@@ -72,6 +72,7 @@ class SessionService
                     $this->reviews->scheduleAfterStudy($session);
                 }
 
+                $this->cycles->apply($session);
                 SessionRecorded::dispatch($session);
             }
 

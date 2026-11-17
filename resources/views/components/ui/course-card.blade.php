@@ -1,4 +1,4 @@
-@props(['course', 'stats' => null])
+@props(['course', 'stats' => null, 'week' => null])
 {{-- Card de curso: faixa na cor, tipo, progresso de tópicos --}}
 @php $s = $stats ?? ['subjects' => 0, 'total' => 0, 'done' => 0, 'progress' => 0]; @endphp
 <a href="{{ route('courses.show', $course) }}" wire:navigate
@@ -18,6 +18,13 @@
     </div>
     <div class="mt-3">
         <x-ui.progress :value="$s['progress']" :max="1" :color="$course->color" />
+        @if ($week !== null && ($week > 0 || $course->weekly_goal_min))
+            <p class="mt-2 flex items-center gap-1 text-xs font-semibold">
+                <x-icon name="clock" class="size-3.5 text-ink-soft" />
+                {{ \App\Support\Duration::human($week) }}@if ($course->weekly_goal_min) <span class="font-normal text-ink-soft">de {{ \App\Support\Duration::human($course->weekly_goal_min * 60) }} na semana</span>@else <span class="font-normal text-ink-soft">nesta semana</span>@endif
+                @if ($course->weekly_goal_min && $week >= $course->weekly_goal_min * 60) <span class="rounded bg-marker px-1 text-[10px] text-[#1f2a44]">meta!</span> @endif
+            </p>
+        @endif
         <p class="mt-2 text-xs text-ink-soft">
             @if ($s['total'] > 0)
                 {{ $s['done'] }} de {{ $s['total'] }} tópicos · {{ $s['subjects'] }} {{ mb_strtolower($course->unitLabel($s['subjects'] !== 1)) }}
