@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\SessionRecorded;
 use App\Models\ActiveTimer;
+use App\Models\Review;
 use App\Models\StudySession;
 use App\Models\Subject;
 use App\Models\Topic;
@@ -15,9 +16,12 @@ use Illuminate\Validation\Rule;
 /** Gravação de sessões de estudo, pelo cronômetro ou manual (docs/especificacao.md §3.2–3.3). */
 class SessionService
 {
+    public function __construct(private ReviewService $reviews) {}
+
     /**
      * @param  array<string, mixed>  $input  subject_id, topic_id?, date, started_at?, duration_seconds, kind,
-     *                                       pages?, questions_total?, questions_correct?, notes?, mark_done?
+     *                                       pages?, questions_total?, questions_correct?, notes?, mark_done?,
+     *                                       review_rating? (good|hard|forgot — ao revisar um tópico com revisão pendente)
      */
     public function record(array $input, ?ActiveTimer $fromTimer = null, ?StudySession $existing = null): StudySession
     {
@@ -58,6 +62,16 @@ class SessionService
             $fromTimer?->delete();
 
             if ($existing === null) {
+                // Revisões: estudar agenda a 1ª; uma sessão de revisão conclui a pendente
+                if ($session->kind === 'review' && $topic !== null) {
+                    $pending = Review::pending()->where('topic_id', $topic->id)->first();
+                    if ($pending !== null) {
+                        $this->reviews->complete($pending, (string) ($data['review_rating'] ?? 'good'), $session);
+                    }
+                } else {
+                    $this->reviews->scheduleAfterStudy($session);
+                }
+
                 SessionRecorded::dispatch($session);
             }
 
@@ -85,6 +99,7 @@ class SessionService
             'questions_correct' => ['nullable', 'integer', 'min:0', 'lte:questions_total'],
             'notes' => ['nullable', 'string', 'max:10000'],
             'mark_done' => ['nullable', 'boolean'],
+            'review_rating' => ['nullable', Rule::in(array_keys(Review::RATINGS))],
         ], [
             'duration_seconds.min' => 'A sessão precisa ter pelo menos 1 minuto.',
             'duration_seconds.max' => 'A sessão pode ter no máximo 12 horas.',

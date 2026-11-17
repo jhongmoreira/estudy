@@ -2,6 +2,10 @@
 
 Tabela `reviews`. Regras em [especificacao.md §3.4](../especificacao.md).
 
+> **Status (17/11/2026):** implementada. "Pular" move a mesma revisão para o próximo dia de estudo (não cria outra linha).
+> A integração com sessões fica em `SessionService::record()` (chama `ReviewService`). O menu (barra inferior/lateral) deixou de usar
+> `@persist` para o contador de revisões ficar sempre atualizado.
+
 ## 4.1 Agendamento automático
 - Listener de `SessionRecorded` → `ReviewService::scheduleAfterStudy()` (só com tópico, `kind ≠ review`, sem revisão pendente).
 - `ReviewService::nextStudyDay()` aplica `study_days`.

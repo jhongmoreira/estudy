@@ -8,7 +8,7 @@ Mais leve que o Financee: sem chart.js (gráficos SVG no Blade), sem dompdf, sem
 Idioma do app, commits e conversa: **português do Brasil**.
 
 ## Status
-Etapas 0 a 3 concluídas (17/11/2026): deploy, login/onboarding, app shell, tema, PWA, cursos/disciplinas/tópicos ("colar lista"), cronômetro/modo foco/Pomodoro e sessões. Próxima: Etapa 4 (revisões espaçadas). Plano: `docs/plano-geral.md`.
+Etapas 0 a 3 concluídas (17/11/2026): deploy, login/onboarding, app shell, tema, PWA, cursos/disciplinas/tópicos ("colar lista"), cronômetro/modo foco/Pomodoro, sessões e revisões espaçadas. Próxima: Etapa 5 (metas, Hoje e ciclo). Plano: `docs/plano-geral.md`.
 
 ## Fluxo de trabalho
 - Antes de publicar: `php artisan test`, `./vendor/bin/phpstan analyse --memory-limit=1G`, `./vendor/bin/pint`.

@@ -7,6 +7,8 @@
         ['route' => 'more', 'label' => 'Mais', 'icon' => 'grid'],
     ];
     $user = auth()->user();
+    // Contador de revisões vencidas (o menu é renderizado a cada tela para ficar atualizado)
+    $dueReviews = \App\Models\Review::due()->count();
 @endphp
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -16,7 +18,6 @@
 <body class="min-h-dvh bg-paper text-ink antialiased">
     <div class="lg:flex">
         {{-- Sidebar (desktop): caderno aberto, com o botão de estudar em destaque --}}
-        @persist('sidebar')
         <aside class="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-rule bg-sheet px-4 py-6 lg:flex">
             <a href="{{ route('home') }}" wire:navigate class="mb-8 flex items-center gap-3 px-2">
                 <img src="/icons/logo.svg" alt="" class="size-9 rounded-xl">
@@ -34,7 +35,10 @@
                        @if ($item['exact'] ?? false) wire:current.exact="!bg-pen-soft !text-pen" @else wire:current="!bg-pen-soft !text-pen" @endif
                        class="flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-ink-soft hover:bg-sheet-2 hover:text-ink">
                         <x-icon :name="$item['icon']" />
-                        {{ $item['label'] }}
+                        <span class="flex-1">{{ $item['label'] }}</span>
+                        @if ($item['route'] === 'reviews' && $dueReviews > 0)
+                            <span class="rounded-full bg-late px-2 py-0.5 text-xs font-bold text-white">{{ $dueReviews }}</span>
+                        @endif
                     </a>
                 @endforeach
             </nav>
@@ -47,17 +51,15 @@
                 </span>
             </a>
         </aside>
-        @endpersist
 
         <div class="min-w-0 flex-1">
-            <main class="mx-auto w-full max-w-4xl px-4 pb-36 pt-safe lg:px-8 lg:pb-12">
+            <main class="mx-auto w-full max-w-4xl px-4 pb-48 pt-safe lg:px-8 lg:pb-24">
                 {{ $slot }}
             </main>
         </div>
     </div>
 
     {{-- Barra inferior (celular): Hoje · Cursos · ▶ · Revisões · Mais --}}
-    @persist('bottom-nav')
     <nav class="fixed inset-x-0 bottom-0 z-30 border-t border-rule bg-sheet/95 pb-safe backdrop-blur lg:hidden" aria-label="Navegação principal">
         <div class="mx-auto grid h-16 max-w-md grid-cols-5 items-center px-1">
             @foreach ($nav as $i => $item)
@@ -72,7 +74,12 @@
                 <a href="{{ route($item['route']) }}" wire:navigate
                    @if ($item['exact'] ?? false) wire:current.exact="!text-pen [&_.dot]:!opacity-100" @else wire:current="!text-pen [&_.dot]:!opacity-100" @endif
                    class="tap flex flex-col items-center gap-0.5 text-[11px] font-medium text-ink-soft">
-                    <x-icon :name="$item['icon']" class="size-6" />
+                    <span class="relative">
+                        <x-icon :name="$item['icon']" class="size-6" />
+                        @if ($item['route'] === 'reviews' && $dueReviews > 0)
+                            <span class="absolute -right-2.5 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-late px-1 text-[10px] font-bold text-white">{{ $dueReviews > 9 ? '9+' : $dueReviews }}</span>
+                        @endif
+                    </span>
                     <span>{{ $item['label'] }}</span>
                     <span class="dot -mt-0.5 h-1 w-4 rounded-full bg-marker opacity-0"></span>
                 </a>
@@ -88,7 +95,6 @@
             <li class="flex items-center gap-3"><span class="grid size-8 shrink-0 place-items-center rounded-full bg-pen-soft font-bold text-pen">3</span> <span>Toque em <strong>Adicionar</strong>. Pronto!</span></li>
         </ol>
     </x-ui.sheet>
-    @endpersist
 
     {{-- Folhas de cadastro, abertas por eventos (edit-course, edit-subject, paste-list) --}}
     <livewire:course-form />

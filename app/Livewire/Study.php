@@ -30,6 +30,7 @@ class Study extends Component
     #[Url(as: 'topico', except: null)]
     public ?int $topicId = null;
 
+    #[Url(as: 'tipo', except: 'theory')]
     public string $kind = 'theory';
 
     public bool $pomodoro = false;
@@ -49,8 +50,12 @@ class Study extends Component
             $this->subjectId = $topic?->subject_id;
             $this->topicId = $topic?->id;
         }
+        $kind = $this->kind;
         if ($this->subjectId !== null) {
             $this->chooseSubject($this->subjectId, keepTopic: true);
+        }
+        if ($kind !== 'theory' && array_key_exists($kind, StudySession::KINDS)) {
+            $this->kind = $kind;
         }
     }
 

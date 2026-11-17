@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Livewire\Concerns\WithUser;
 use App\Models\ActiveTimer;
+use App\Models\Review;
 use App\Models\StudySession;
 use App\Services\SessionService;
 use App\Services\TimerService;
@@ -49,6 +50,8 @@ class Focus extends Component
     public ?int $questionsCorrect = null;
 
     public bool $markDone = false;
+
+    public string $reviewRating = 'good';
 
     public function mount(TimerService $timers): void
     {
@@ -119,6 +122,7 @@ class Focus extends Component
                 'questions_correct' => $this->questionsCorrect,
                 'notes' => $this->notes,
                 'mark_done' => $this->markDone,
+                'review_rating' => $this->reviewRating,
             ], $timer);
         } catch (ValidationException $e) {
             $errors = collect($e->errors())->mapWithKeys(fn ($m, $k) => [match ($k) {
@@ -151,6 +155,7 @@ class Focus extends Component
         return view('livewire.focus', [
             'timer' => $timer,
             'topics' => $timer ? $timer->subject->topics()->get() : collect(),
+            'pendingReview' => $this->topicId ? Review::pending()->where('topic_id', $this->topicId)->first() : null,
             'pomodoroConfig' => $this->user()->pomodoro(),
             'goalSeconds' => $this->user()->dailyGoalMinutes() * 60,
             'todaySeconds' => $sessions->dailyTotals($today, $today)[$today->toDateString()] ?? 0,

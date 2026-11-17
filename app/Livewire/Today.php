@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Livewire\Concerns\WithUser;
 use App\Models\ActiveTimer;
 use App\Models\Course;
+use App\Models\Review;
 use App\Services\ProgressService;
 use App\Services\SessionService;
 use App\Support\Week;
@@ -42,6 +43,8 @@ class Today extends Component
         return view('livewire.today', [
             'daily' => $daily,
             'running' => ActiveTimer::with('subject')->first(),
+            'dueReviews' => Review::due()->with(['topic', 'subject.course'])->orderBy('due_on')->limit(5)->get(),
+            'dueCount' => Review::due()->count(),
             'user' => $user,
             'greeting' => $greeting,
             'today' => $now,
