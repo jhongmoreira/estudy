@@ -70,8 +70,18 @@
         </x-ui.card>
     </x-ui.section>
 
-    <x-ui.section title="Seus cursos">
-        <x-ui.empty icon="cap" title="Nenhum curso por aqui ainda"
-                    text="Em breve você vai cadastrar o que estuda — graduação, pós, curso livre, idioma ou aquele livro — com disciplinas e tópicos." />
+    <x-ui.section title="Em andamento" :action="$courses->isNotEmpty() ? 'Ver todos' : null" :action-href="route('courses')">
+        @if ($courses->isEmpty())
+            <x-ui.empty icon="cap" title="Nenhum curso por aqui ainda"
+                        text="Cadastre o que você estuda — graduação, pós, curso livre, idioma ou aquele livro — com disciplinas ou módulos e tópicos.">
+                <x-ui.button :href="route('courses', ['novo' => 1])" icon="plus">Criar meu primeiro curso</x-ui.button>
+            </x-ui.empty>
+        @else
+            <div class="grid gap-3 sm:grid-cols-2">
+                @foreach ($courses as $item)
+                    <x-ui.course-card :course="$item" :stats="$courseStats[$item->id]" wire:key="today-course-{{ $item->id }}" />
+                @endforeach
+            </div>
+        @endif
     </x-ui.section>
 </div>
