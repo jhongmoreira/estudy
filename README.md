@@ -6,7 +6,7 @@ Para quem estuda por conta própria, faz cursos livres, extensão, graduação o
 **Recursos:** cursos → disciplinas/módulos → tópicos (com "colar lista"), cronômetro com modo foco e Pomodoro,
 registro manual de sessões (páginas, questões), revisões espaçadas configuráveis, metas diárias/semanais e sequência de dias,
 sugestões "o que estudar agora", ciclo de estudos, agenda de provas/entregas com médias, estatísticas (sem biblioteca de gráficos),
-histórico de formação com certificados, notificações push, backup/importação JSON, CSV, tema escuro e app instalável.
+histórico de formação com certificados, relatórios em PDF (estudos, boletim, progresso, formação), notificações push, backup/importação JSON, CSV, tema escuro e app instalável.
 
 - **Configurar em outro computador:** [`docs/desenvolvimento.md`](docs/desenvolvimento.md)
 - Operação em produção: [`docs/go-live.md`](docs/go-live.md)
