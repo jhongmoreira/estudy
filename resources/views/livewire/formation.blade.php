@@ -1,5 +1,6 @@
 <div x-data>
     <x-ui.page-header title="Formação" :back="route('more')" subtitle="Seu histórico de cursos, horas e certificados">
+        <a href="{{ route('reports.formation', $tab === 'andamento' ? ['andamento' => 1] : []) }}" class="tap rounded-xl px-3 py-2 text-sm font-semibold text-pen hover:bg-pen-soft print:hidden">PDF</a>
         <a href="{{ route('formation.csv') }}" class="tap rounded-full p-2.5 text-ink-soft hover:bg-sheet-2 print:hidden" aria-label="Exportar CSV" title="Exportar CSV"><x-icon name="download" /></a>
         <button type="button" onclick="window.print()" class="tap rounded-full p-2.5 text-ink-soft hover:bg-sheet-2 print:hidden" aria-label="Imprimir" title="Imprimir"><x-icon name="clipboard" /></button>
     </x-ui.page-header>

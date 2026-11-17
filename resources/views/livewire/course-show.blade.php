@@ -114,6 +114,13 @@
         @endif
     </section>
 
+    <div class="mt-8 flex flex-wrap gap-2">
+        <x-ui.button :href="route('reports.course', $course)" :navigate="false" variant="secondary" icon="download" class="!py-2.5">Progresso em PDF</x-ui.button>
+        @if ($course->isAcademic() || $agendaItems->isNotEmpty())
+            <x-ui.button :href="route('reports.grades', $course)" :navigate="false" variant="secondary" icon="download" class="!py-2.5">Boletim em PDF</x-ui.button>
+        @endif
+    </div>
+
     {{-- Zona de perigo --}}
     <div class="mt-10 border-t border-rule pt-6" x-data>
         <button type="button" @click="$dispatch('open-sheet', 'delete-course')" class="tap flex items-center gap-2 text-sm font-semibold text-late">

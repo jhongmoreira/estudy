@@ -4,11 +4,11 @@ PWA de organização de estudos pessoais (autodidata, cursos livres, extensão, 
 o usuário cadastra os próprios cursos, disciplinas/módulos e tópicos.
 Destino: https://estudy.jgmoreira.com.br (Hostoo, mesma conta e mesmo fluxo do Financee em `~/financee`).
 Laravel 12 · PHP 8.4 · Livewire 3 + Alpine · Tailwind 4 · SQLite · Pest · Larastan. **Sem Docker.**
-Mais leve que o Financee: sem chart.js (gráficos SVG no Blade), sem dompdf, sem intervention/image, sem pacote de ícones (ícones inline em `App\Support\Icons`).
+Mais leve que o Financee: sem chart.js (gráficos SVG/CSS no Blade), sem intervention/image, dompdf só para os relatórios em PDF (servidor), sem pacote de ícones (ícones inline em `App\Support\Icons`).
 Idioma do app, commits e conversa: **português do Brasil**.
 
 ## Status
-Versão 1.0 (17/11/2026): etapas 0–9 concluídas e em produção. Operação em `docs/go-live.md`; outro computador em `docs/desenvolvimento.md`. Demo local: `php artisan migrate --seed` → demo@estudy.test / demo12345. Plano: `docs/plano-geral.md`.
+Versão 1.0 (17/11/2026): etapas 0–9 concluídas e em produção; etapa 10 (relatórios em PDF) adicionada depois. Operação em `docs/go-live.md`; outro computador em `docs/desenvolvimento.md`. Demo local: `php artisan migrate --seed` → demo@estudy.test / demo12345. Plano: `docs/plano-geral.md`.
 
 ## Fluxo de trabalho
 - Antes de publicar: `php artisan test`, `./vendor/bin/phpstan analyse --memory-limit=1G`, `./vendor/bin/pint`.
