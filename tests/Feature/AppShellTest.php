@@ -11,7 +11,7 @@ it('abre todas as telas principais', function (string $route) {
         ->get(route($route))
         ->assertOk()
         ->assertSee('Estudar agora');
-})->with(['home', 'courses', 'study', 'reviews', 'more', 'profile', 'settings', 'sessions', 'cycle', 'agenda', 'stats', 'formation', 'notifications']);
+})->with(['home', 'courses', 'study', 'reviews', 'more', 'profile', 'settings', 'sessions', 'cycle', 'agenda', 'stats', 'formation', 'notifications', 'reports']);
 
 it('mostra saudação, meta e semana na tela Hoje', function () {
     $user = User::factory()->create(['name' => 'Ana Souza', 'settings' => ['daily_goal_min' => 90]]);

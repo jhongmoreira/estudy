@@ -33,7 +33,7 @@ Documentos:
 |---|---|---|
 | `chart.js` (~70 kB gz) | **Gráficos em SVG gerados no Blade** (barras, heatmap, rosca) | zero JS de gráfico; renderiza no servidor |
 | `blade-ui-kit/blade-heroicons` | **Sprite SVG próprio** (~35 ícones Lucide) via `<x-icon>` | menos pacotes e cache de views menor |
-| `barryvdh/laravel-dompdf` | **sem PDF**: exportação CSV/JSON + página "imprimir" (CSS `@media print`) | dompdf é o pacote mais pesado |
+| `barryvdh/laravel-dompdf` | Inicialmente sem PDF; **reintroduzido na etapa 10** a pedido, só para os relatórios (roda no servidor) | — |
 | `intervention/image` (avatar) | **sem foto**: avatar com iniciais e cor | sem processamento de imagem |
 | — | `laravel-notification-channels/webpush` mantido | lembretes de revisão/prazo são essenciais |
 
@@ -108,6 +108,7 @@ Princípios (herdados do Financee):
 | 7 | Estatísticas e histórico de formação | [07](etapas/07-estatisticas-e-formacao.md) | Gráficos SVG, horas, certificados |
 | 8 | Notificações push | [08](etapas/08-notificacoes.md) | Lembretes diários, revisões e prazos |
 | 9 | Exportação, polimento e go-live | [09](etapas/09-exportacao-polimento-go-live.md) | Versão 1.0 |
+| 10 | Relatórios em PDF | [10](etapas/10-relatorios-pdf.md) | Estudos, boletim, progresso do curso, formação |
 
 Cada etapa termina com testes, Larastan e Pint sem erros, deploy (`scripts/release.sh`) e validação no celular.
 Ordem pensada para uso real cedo: ao fim da etapa 3 o app já serve para cronometrar estudos.

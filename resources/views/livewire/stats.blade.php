@@ -1,6 +1,9 @@
 @php $fmt = fn (int $s) => \App\Support\Duration::human($s); @endphp
 <div>
-    <x-ui.page-header title="Estatísticas" :back="route('more')" :subtitle="$summary['from']->format('d/m/Y').' a '.$summary['to']->format('d/m/Y')" />
+    <x-ui.page-header title="Estatísticas" :back="route('more')" :subtitle="$summary['from']->format('d/m/Y').' a '.$summary['to']->format('d/m/Y')">
+        <a href="{{ route('reports.study', array_filter(['de' => $summary['from']->toDateString(), 'ate' => $summary['to']->toDateString(), 'curso' => $courseId])) }}"
+           class="tap flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-pen hover:bg-pen-soft"><x-icon name="download" class="size-4" /> PDF</a>
+    </x-ui.page-header>
 
     <div class="mb-6 grid grid-cols-2 gap-2 sm:max-w-md">
         <select wire:model.live="period" aria-label="Período" class="rounded-xl border-2 border-rule bg-sheet px-3 py-2.5 text-sm font-semibold outline-none focus:border-pen">

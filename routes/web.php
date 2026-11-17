@@ -3,6 +3,7 @@
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FormationController;
 use App\Http\Controllers\PushSubscriptionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ServiceWorkerController;
 use App\Http\Middleware\EnsureOnboarded;
 use App\Livewire;
@@ -28,6 +29,11 @@ Route::middleware(['auth', EnsureOnboarded::class])->group(function () {
     Route::post('/push/assinar', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
     Route::post('/push/cancelar', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
     Route::get('/formacao', Livewire\Formation::class)->name('formation');
+    Route::get('/relatorios', Livewire\Reports::class)->name('reports');
+    Route::get('/relatorios/estudos.pdf', [ReportController::class, 'study'])->name('reports.study');
+    Route::get('/relatorios/boletim/{course}.pdf', [ReportController::class, 'grades'])->name('reports.grades');
+    Route::get('/relatorios/curso/{course}.pdf', [ReportController::class, 'course'])->name('reports.course');
+    Route::get('/relatorios/formacao.pdf', [ReportController::class, 'formation'])->name('reports.formation');
     Route::get('/exportar/backup.json', [ExportController::class, 'backup'])->name('export.backup');
     Route::get('/exportar/sessoes.csv', [ExportController::class, 'sessions'])->name('export.sessions');
     Route::get('/formacao/formacao.csv', [FormationController::class, 'csv'])->name('formation.csv');

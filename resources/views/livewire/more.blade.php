@@ -23,6 +23,7 @@
             <x-ui.list-item icon="sliders" label="Configurações de estudo" description="Metas, dias de estudo, Pomodoro" :href="route('settings')" />
             <x-ui.list-item icon="calendar" label="Agenda e notas" description="Provas, trabalhos, entregas e médias" :href="route('agenda')" />
             <x-ui.list-item icon="chart" label="Estatísticas" description="Tempo, rendimento, acertos e dificuldades" :href="route('stats')" />
+            <x-ui.list-item icon="download" label="Relatórios em PDF" description="Estudos do período, boletim, progresso do curso, formação" :href="route('reports')" />
             <x-ui.list-item icon="award" label="Histórico de formação" description="Cursos concluídos, horas e certificados" :href="route('formation')" />
         </x-ui.card>
     </x-ui.section>

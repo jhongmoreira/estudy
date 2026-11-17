@@ -25,10 +25,19 @@ class StatsService
 
     public function scope(string $period, ?int $courseId): static
     {
-        $this->to = CarbonImmutable::today();
-        $this->from = $period === 'all'
-            ? CarbonImmutable::parse(StudySession::min('date') ?? $this->to->toDateString())
-            : $this->to->subDays(max(1, (int) $period) - 1);
+        $to = CarbonImmutable::today();
+        $from = $period === 'all'
+            ? CarbonImmutable::parse(StudySession::min('date') ?? $to->toDateString())
+            : $to->subDays(max(1, (int) $period) - 1);
+
+        return $this->scopeRange($from, $to, $courseId);
+    }
+
+    /** Intervalo livre (usado nos relatórios em PDF). */
+    public function scopeRange(CarbonImmutable $from, CarbonImmutable $to, ?int $courseId): static
+    {
+        $this->from = $from->startOfDay();
+        $this->to = $to->startOfDay();
         $this->courseId = $courseId;
 
         return $this;
