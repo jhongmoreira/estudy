@@ -3,11 +3,14 @@
 namespace App\Livewire;
 
 use App\Livewire\Concerns\WithUser;
+use App\Models\ActiveTimer;
 use App\Models\Course;
 use App\Services\ProgressService;
+use App\Services\SessionService;
 use App\Support\Week;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -16,7 +19,10 @@ class Today extends Component
 {
     use WithUser;
 
-    public function render(ProgressService $progress): View
+    #[On('session-saved')]
+    public function refreshToday(): void {}
+
+    public function render(ProgressService $progress, SessionService $sessions): View
     {
         $user = $this->user();
         $courses = Course::query()->where('status', 'active')->ordered()->limit(6)->get();
@@ -30,13 +36,18 @@ class Today extends Component
             default => 'Boa noite',
         };
 
+        $week = Week::of($now, $user->weekStartsOn());
+        $daily = $sessions->dailyTotals($week->start, $week->end);
+
         return view('livewire.today', [
+            'daily' => $daily,
+            'running' => ActiveTimer::with('subject')->first(),
             'user' => $user,
             'greeting' => $greeting,
             'today' => $now,
             'goalMinutes' => $user->dailyGoalMinutes(),
-            'todaySeconds' => 0, // sessões chegam na etapa 3
-            'week' => Week::of($now, $user->weekStartsOn()),
+            'todaySeconds' => $daily[$now->toDateString()] ?? 0,
+            'week' => $week,
             'courses' => $courses,
             'courseStats' => $progress->forCourses($courses),
         ]);

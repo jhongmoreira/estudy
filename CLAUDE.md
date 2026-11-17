@@ -8,7 +8,7 @@ Mais leve que o Financee: sem chart.js (gráficos SVG no Blade), sem dompdf, sem
 Idioma do app, commits e conversa: **português do Brasil**.
 
 ## Status
-Etapas 0 a 2 concluídas (17/11/2026): deploy, login/onboarding, app shell, tema, PWA, cursos/disciplinas/tópicos com "colar lista". Próxima: Etapa 3 (cronômetro e sessões). Plano: `docs/plano-geral.md`.
+Etapas 0 a 3 concluídas (17/11/2026): deploy, login/onboarding, app shell, tema, PWA, cursos/disciplinas/tópicos ("colar lista"), cronômetro/modo foco/Pomodoro e sessões. Próxima: Etapa 4 (revisões espaçadas). Plano: `docs/plano-geral.md`.
 
 ## Fluxo de trabalho
 - Antes de publicar: `php artisan test`, `./vendor/bin/phpstan analyse --memory-limit=1G`, `./vendor/bin/pint`.
@@ -25,6 +25,8 @@ Etapas 0 a 2 concluídas (17/11/2026): deploy, login/onboarding, app shell, tema
 - Folhas globais (no layout): `$dispatch('edit-course', {id})`, `$dispatch('edit-subject', {courseId, id})`, `$dispatch('paste-list', {courseId, subjectId})`; ao salvar disparam `course-saved`/`subject-saved`.
 - Depois de criar views novas, rode `npm run build` antes de conferir no navegador (classes Tailwind novas).
 - Itens de grid/flex com texto `truncate` precisam de `min-w-0` (senão a página estoura a largura no celular).
+- Sessões: grave sempre via `App\Services\SessionService::record()` (valida, atualiza o tópico e dispara `SessionRecorded`). Abrir registro/edição: `$dispatch('log-session', {subjectId, id})`; ao salvar dispara `session-saved`.
+- Para conferir no navegador: `php artisan serve --port=8123` em segundo plano e pare com a ferramenta de tarefas (não use `pkill -f` com o padrão na própria linha de comando — mata o shell). Login tem limite de 5/min: `php artisan cache:clear` se estourar.
 - Usuários de teste locais: `demo@estudy.test` / `novo@estudy.test` (senha `demo12345`).
 
 ## Regras do domínio (não quebrar)

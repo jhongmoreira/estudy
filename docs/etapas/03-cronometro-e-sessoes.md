@@ -2,6 +2,11 @@
 
 Tabelas: `active_timers`, `study_sessions`. Regras em [especificacao.md §3.2–3.3](../especificacao.md).
 
+> **Status (17/11/2026):** implementada. Notas: o Pomodoro é controlado pelo navegador (ao fim do foco ele chama `pause`;
+> a pausa é tempo pausado, que não conta) — se o app estiver fechado na hora, o cronômetro segue contando até você voltar.
+> Sem rede, o relógio continua (é calculado dos horários do servidor), mas pausar/encerrar exigem conexão (aviso "Sem conexão").
+> Evento `App\Events\SessionRecorded` já é disparado para as etapas 4 e 5.
+
 ## 3.1 Iniciar (`/estudar`)
 - Sheet/página de seleção: "Continuar" (última disciplina/tópico), disciplinas dos cursos ativos (com cor), busca; tópico opcional; tipo de estudo (teoria, videoaula, aula, exercícios, revisão, prática, escrita) — padrão = último usado na disciplina.
 - Botão **Começar** → cria `active_timers` e abre o modo foco.

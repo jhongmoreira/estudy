@@ -1,6 +1,6 @@
 # Estudy — Plano Geral
 
-> **Status (17/11/2026):** Etapas 0 a 2 concluídas (https://estudy.jgmoreira.com.br). Próxima: Etapa 3 (cronômetro e sessões).
+> **Status (17/11/2026):** Etapas 0 a 3 concluídas (https://estudy.jgmoreira.com.br). Próxima: Etapa 4 (revisões espaçadas).
 
 PWA de **organização de estudos pessoais**, mobile-first: cursos, disciplinas e tópicos cadastrados pelo
 próprio usuário, cronômetro, registro de sessões, revisões espaçadas, metas semanais, prazos/notas e estatísticas.

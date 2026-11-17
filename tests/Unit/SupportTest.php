@@ -10,7 +10,9 @@ it('formata durações', function () {
         ->and(Duration::human(45 * 60))->toBe('45 min')
         ->and(Duration::human(3600))->toBe('1h')
         ->and(Duration::human(3900))->toBe('1h05')
-        ->and(Duration::clock(2537))->toBe('00:42:17');
+        ->and(Duration::clock(2537))->toBe('00:42:17')
+        ->and(Duration::short(1500))->toBe('25m')
+        ->and(Duration::short(3900))->toBe('1h05');
 });
 
 it('interpreta durações digitadas', function (string $input, ?int $minutes) {

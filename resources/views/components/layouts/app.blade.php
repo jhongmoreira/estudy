@@ -94,6 +94,9 @@
     <livewire:course-form />
     <livewire:subject-form />
     <livewire:paste-list />
+    <livewire:session-form />
+
+    <x-ui.timer-bar />
 
     <x-ui.toasts />
 </body>
