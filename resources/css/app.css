@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+
+@source '../**/*.blade.php';
+@source '../js/**/*.js';
+@source '../../app/**/*.php';
+
+@theme {
+    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
