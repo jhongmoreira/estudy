@@ -1,6 +1,6 @@
 # Estudy — Plano Geral
 
-> **Status (17/11/2026):** Etapas 0 a 8 concluídas (https://estudy.jgmoreira.com.br). Próxima: Etapa 9 (exportação, polimento e go-live).
+> **Status (17/11/2026):** versão 1.0 — etapas 0 a 9 concluídas e em produção (https://estudy.jgmoreira.com.br). Operação: [go-live.md](go-live.md).
 
 PWA de **organização de estudos pessoais**, mobile-first: cursos, disciplinas e tópicos cadastrados pelo
 próprio usuário, cronômetro, registro de sessões, revisões espaçadas, metas semanais, prazos/notas e estatísticas.

@@ -1,5 +1,9 @@
 # Etapa 9 — Exportação, polimento e go-live
 
+> **Status (17/11/2026):** implementada — versão 1.0. Backup JSON (`format: 1`) com importação que substitui tudo (prévia + senha),
+> CSV de sessões e de formação, "Recomeçar do zero", seeder de demonstração, atalho de espaço no modo foco, `go-live.md` e
+> `desenvolvimento.md`. Medição local com o demo (6 meses): tela Hoje em 36 consultas / ~50 ms de PHP; JS total ~2,8 kB gz (+ Livewire/Alpine), CSS ~8,6 kB gz.
+
 ## 9.1 Exportação e importação
 - **CSV**: sessões (filtro de período/curso) e histórico de formação.
 - **JSON completo** ("Exportar todos os meus dados"), versionado (`"format": 1`).
