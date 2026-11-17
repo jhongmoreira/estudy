@@ -2,6 +2,7 @@
 
 use App\Livewire\Profile;
 use App\Models\AgendaItem;
+use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\Review;
 use App\Models\StudyCycle;
@@ -12,6 +13,7 @@ use App\Services\CycleService;
 use App\Services\DataPortability;
 use App\Services\SessionService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Livewire\Livewire;
 
@@ -87,4 +89,14 @@ it('o seeder de demonstração roda', function () {
     $demo = User::where('email', 'demo@estudy.test')->first();
     $this->actingAs($demo);
     expect(Course::count())->toBe(5)->and(StudySession::count())->toBeGreaterThan(100);
+});
+
+it('zera dados de cursos carregados do banco, com certificado (sem lazy loading)', function () {
+    Storage::fake('local');
+    $course = Course::first();
+    Certificate::create(['course_id' => $course->id, 'file_path' => 'certificates/x.pdf', 'original_name' => 'x.pdf', 'mime' => 'application/pdf', 'size' => 1]);
+
+    app(DataPortability::class)->reset($this->user->fresh());
+
+    expect(Course::count())->toBe(0)->and(Certificate::count())->toBe(0);
 });

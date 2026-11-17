@@ -73,7 +73,8 @@ class Course extends Model
 
     protected static function booted(): void
     {
-        static::deleting(fn (Course $c) => $c->certificate?->delete());
+        // Consulta direta (sem relação preguiçosa) para apagar também o arquivo do certificado
+        static::deleting(fn (Course $c) => Certificate::where('course_id', $c->id)->first()?->delete());
     }
 
     protected function casts(): array

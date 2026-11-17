@@ -9,6 +9,7 @@ Testes automatizados (Pest), Larastan nível 6 e Pint rodam a cada release.
 |---|---|---|
 | a cada minuto | `app:post-deploy` | Após um deploy: migrations + caches (cada passo em processo separado; migrations antes do `optimize:clear`) |
 | a cada minuto | `queue:work --stop-when-empty` | Fila: envio das notificações push |
+| a cada minuto | `timers:pomodoro` | Pomodoro com o app fechado: pausa no fim exato do foco e manda push (fim do foco e fim da pausa) |
 | a cada 15 min | `notifications:dispatch` | Lembrete diário, revisões (8h), prazos (8h/19h), sequência (21h) — cada aviso 1x/dia |
 | dom 04:00 | `app:db-maintenance` | `PRAGMA optimize` no SQLite |
 | dia 1º 04:30 | `app:db-maintenance --vacuum` | Compacta o arquivo do SQLite |

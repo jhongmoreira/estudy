@@ -37,6 +37,7 @@ class User extends Authenticatable
         'reviews_auto' => true,           // agendar revisões ao estudar um tópico
         'reviews_per_day' => 5,           // limite ao reagendar atrasadas
         'reminder_time' => '19:00',       // lembrete diário (null = desligado)
+        'timer_sound' => true,            // alarme sonoro do Pomodoro com o app aberto
     ];
 
     public const THEMES = ['system', 'light', 'dark'];

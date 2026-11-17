@@ -6,6 +6,12 @@ Tabelas: `active_timers`, `study_sessions`. Regras em [especificacao.md §3.2–
 > a pausa é tempo pausado, que não conta) — se o app estiver fechado na hora, o cronômetro segue contando até você voltar.
 > Sem rede, o relógio continua (é calculado dos horários do servidor), mas pausar/encerrar exigem conexão (aviso "Sem conexão").
 > Evento `App\Events\SessionRecorded` já é disparado para as etapas 4 e 5.
+>
+> **Atualização (17/11/2026, pedido do usuário — "sinal a gente nem vê"):** o Pomodoro agora também roda no servidor
+> (`timers:pomodoro`, cron a cada minuto): pausa no horário exato em que o foco acabou e manda **push** no fim do foco e da pausa
+> (toca o som do celular mesmo bloqueado; tag `estudy-timer` vibra e fica na tela). Colunas `pomodoro_block` e `break_alerted_at`
+> evitam aviso duplicado quando o navegador já pausou/avisou. Com o app aberto, alarme de 3 notas (2x) + vibração; dá para desligar em
+> Configurações → Pomodoro → "Tocar alarme". O modo foco sugere ativar as notificações quando não há push neste aparelho.
 
 ## 3.1 Iniciar (`/estudar`)
 - Sheet/página de seleção: "Continuar" (última disciplina/tópico), disciplinas dos cursos ativos (com cor), busca; tópico opcional; tipo de estudo (teoria, videoaula, aula, exercícios, revisão, prática, escrita) — padrão = último usado na disciplina.
