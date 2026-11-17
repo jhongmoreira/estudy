@@ -82,6 +82,11 @@ class Focus extends Component
         $this->finishing = false;
     }
 
+    public function breakAlerted(TimerService $timers): void
+    {
+        $timers->markBreakAlerted($this->timer());
+    }
+
     public function updatedNotes(): void
     {
         $this->timer()->update(['notes' => mb_substr($this->notes, 0, 10000)]);
@@ -158,6 +163,8 @@ class Focus extends Component
             'pendingReview' => $this->topicId ? Review::pending()->where('topic_id', $this->topicId)->first() : null,
             'pomodoroConfig' => $this->user()->pomodoro(),
             'goalSeconds' => $this->user()->dailyGoalMinutes() * 60,
+            'sound' => (bool) $this->user()->setting('timer_sound'),
+            'hasPush' => $this->user()->pushSubscriptions()->exists(),
             'todaySeconds' => $sessions->dailyTotals($today, $today)[$today->toDateString()] ?? 0,
         ]);
     }

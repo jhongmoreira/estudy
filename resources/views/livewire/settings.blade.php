@@ -59,7 +59,15 @@
                     <x-ui.input label="Pausa longa" name="pomodoro.long" type="number" inputmode="numeric" wire:model="pomodoro.long" suffix="min" />
                     <x-ui.input label="Longa a cada" name="pomodoro.every" type="number" inputmode="numeric" wire:model="pomodoro.every" suffix="focos" />
                 </div>
-                <p class="text-sm text-ink-soft">No modo Pomodoro o cronômetro pausa sozinho ao fim de cada foco; o tempo de pausa não conta como estudo.</p>
+                <label class="flex cursor-pointer items-center gap-3">
+                    <span class="min-w-0 flex-1">
+                        <span class="block font-semibold">Tocar alarme</span>
+                        <span class="block text-sm text-ink-soft">Som + vibração ao fim do foco e da pausa (com o app aberto).</span>
+                    </span>
+                    <input type="checkbox" wire:model="timer_sound" class="peer sr-only">
+                    <span class="relative h-7 w-12 shrink-0 rounded-full bg-rule transition peer-checked:bg-pen after:absolute after:left-1 after:top-1 after:size-5 after:rounded-full after:bg-white after:transition peer-checked:after:translate-x-5"></span>
+                </label>
+                <p class="text-sm text-ink-soft">No modo Pomodoro o cronômetro pausa sozinho ao fim de cada foco — mesmo com o app fechado — e o tempo de pausa não conta como estudo. Com as <a href="{{ route('notifications') }}" wire:navigate class="font-semibold text-pen">notificações</a> ativadas, o celular toca o som de notificação mesmo bloqueado.</p>
             </x-ui.card>
         </x-ui.section>
 

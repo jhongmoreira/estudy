@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $topic_id
  * @property string $kind
  * @property bool $pomodoro
+ * @property int $pomodoro_block
+ * @property CarbonImmutable|null $break_alerted_at
  * @property CarbonImmutable $started_at
  * @property CarbonImmutable|null $paused_at
  * @property int $paused_seconds
@@ -28,12 +30,13 @@ class ActiveTimer extends Model
 {
     use BelongsToUser;
 
-    protected $fillable = ['subject_id', 'topic_id', 'kind', 'pomodoro', 'started_at', 'paused_at', 'paused_seconds', 'notes'];
+    protected $fillable = ['subject_id', 'topic_id', 'kind', 'pomodoro', 'pomodoro_block', 'break_alerted_at', 'started_at', 'paused_at', 'paused_seconds', 'notes'];
 
     /** @var array<string, mixed> */
     protected $attributes = [
         'paused_seconds' => 0,
         'pomodoro' => false,
+        'pomodoro_block' => 0,
     ];
 
     protected function casts(): array
@@ -43,6 +46,8 @@ class ActiveTimer extends Model
             'started_at' => 'immutable_datetime',
             'paused_at' => 'immutable_datetime',
             'paused_seconds' => 'integer',
+            'pomodoro_block' => 'integer',
+            'break_alerted_at' => 'immutable_datetime',
         ];
     }
 

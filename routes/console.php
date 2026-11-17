@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\NotificationService;
+use App\Services\TimerService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
@@ -38,3 +39,10 @@ Artisan::command('notifications:dispatch', function (NotificationService $servic
 })->purpose('Envia os avisos de estudo do horário atual');
 
 Schedule::command('notifications:dispatch')->everyFifteenMinutes()->withoutOverlapping();
+
+// Pomodoro com o app fechado: pausa ao fim do foco e avisa por push (fim do foco e fim da pausa).
+Artisan::command('timers:pomodoro', function (TimerService $timers) {
+    $this->info($timers->pomodoroTickAll().' aviso(s) de Pomodoro.');
+})->purpose('Pausa/avisa os cronômetros em modo Pomodoro');
+
+Schedule::command('timers:pomodoro')->everyMinute()->withoutOverlapping();

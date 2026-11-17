@@ -93,25 +93,42 @@ const pad = (n) => String(n).padStart(2, '0');
 const clockText = (s) => `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
 const shortText = (s) => `${pad(Math.floor(s / 60))}:${pad(s % 60)}`;
 
-const beep = () => {
+// Alarme: acorde de 3 notas, repetido 2x (~2 s). O AudioContext é "destravado" no primeiro toque na tela
+// (os navegadores só liberam som depois de uma interação), para poder tocar sozinho depois.
+let audioCtx = null;
+const unlockAudio = () => {
     try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        [0, 0.25].forEach((t) => {
+        audioCtx ??= new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    } catch { /* sem áudio */ }
+};
+['pointerdown', 'keydown', 'touchstart'].forEach((ev) => window.addEventListener(ev, unlockAudio, { passive: true }));
+
+const chime = () => {
+    try {
+        unlockAudio();
+        const ctx = audioCtx;
+        if (!ctx) return;
+        const notes = [880, 1108.73, 1318.51]; // lá, dó#, mi
+        [0, 0.9].forEach((start) => notes.forEach((freq, i) => {
+            const t = ctx.currentTime + start + i * 0.18;
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            osc.frequency.value = 880;
-            gain.gain.setValueAtTime(0.15, ctx.currentTime + t);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.2);
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.0001, t);
+            gain.gain.exponentialRampToValueAtTime(0.35, t + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
             osc.connect(gain).connect(ctx.destination);
-            osc.start(ctx.currentTime + t);
-            osc.stop(ctx.currentTime + t + 0.2);
-        });
+            osc.start(t);
+            osc.stop(t + 0.65);
+        }));
     } catch { /* sem áudio */ }
 };
 
-const alertUser = (title, body) => {
-    navigator.vibrate?.([200, 100, 200]);
-    beep();
+const alertUser = (title, body, sound = true) => {
+    navigator.vibrate?.([400, 150, 400, 150, 400]);
+    if (sound) chime();
     if ('Notification' in window && Notification.permission === 'granted' && document.visibilityState !== 'visible') {
         navigator.serviceWorker?.getRegistration().then((reg) => {
             if (reg) reg.showNotification(title, { body, icon: '/icons/icon-192.png', tag: 'estudy-timer' });
@@ -122,7 +139,7 @@ const alertUser = (title, body) => {
 };
 
 document.addEventListener('alpine:init', () => {
-    window.Alpine.data('timerClock', (wire, pomodoro, pomodoroOn, todaySeconds, goalSeconds, name, fixedState = null) => ({
+    window.Alpine.data('timerClock', (wire, pomodoro, pomodoroOn, todaySeconds, goalSeconds, name, fixedState = null, sound = true) => ({
         display: '00:00:00', label: '', sub: '', ring: 0, ringDone: false, paused: false,
         lastBlock: null, breakAlerted: false, timer: null, lock: null, offset: 0, lastServerNow: null,
 
@@ -172,7 +189,7 @@ document.addEventListener('alpine:init', () => {
                 if (!this.paused) {
                     this.breakAlerted = false;
                     if (this.lastBlock !== null && block > this.lastBlock) {
-                        alertUser('Hora da pausa!', `${name}: ${pomodoro.focus} min de foco concluídos.`);
+                        alertUser('Hora da pausa!', `${name}: ${pomodoro.focus} min de foco concluídos.`, sound);
                         wire.pause();
                     }
                     this.lastBlock = block;
@@ -192,7 +209,8 @@ document.addEventListener('alpine:init', () => {
                     this.ringDone = left <= 0;
                     if (left <= 0 && !this.breakAlerted) {
                         this.breakAlerted = true;
-                        alertUser('Pausa encerrada', `Hora de voltar para ${name}.`);
+                        alertUser('Pausa encerrada', `Hora de voltar para ${name}.`, sound);
+                        wire.breakAlerted();
                     }
                 }
             } else {
