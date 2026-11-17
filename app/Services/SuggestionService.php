@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\AgendaItem;
 use App\Models\StudySession;
 use App\Models\Topic;
 use App\Support\Duration;
@@ -41,7 +42,20 @@ class SuggestionService
             ]);
         }
 
-        // 2. Prazos da agenda nos próximos 3 dias: entra na etapa 6
+        // 2. Prazos da agenda nos próximos 3 dias
+        $deadlines = AgendaItem::with('subject.course')->where('status', 'open')->whereNotNull('subject_id')
+            ->whereBetween('due_on', [$today->toDateString(), $today->addDays(3)->toDateString()])->orderBy('due_on')->limit(2)->get();
+        foreach ($deadlines as $a) {
+            $s = $a->subject;
+            if ($s === null) {
+                continue;
+            }
+            $add([
+                'title' => $s->name, 'detail' => $a->title,
+                'reason' => $a->due_on->isToday() ? 'Prazo hoje' : ($a->due_on->isTomorrow() ? 'Prazo amanhã' : 'Prazo '.$a->due_on->translatedFormat('l')),
+                'color' => $s->color ?? $s->course->color, 'subject_id' => $s->id, 'topic_id' => $this->nextTopicId($s->id), 'kind' => 'exercises',
+            ]);
+        }
 
         // 3. Metas semanais atrasadas
         foreach ($this->goals->deficits($week, $today)->take(2) as $d) {

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\AgendaItem;
 use App\Models\Course;
 use App\Models\Subject;
 use App\Services\ProgressService;
@@ -38,6 +39,7 @@ class CourseShow extends Component
 
     #[On('course-saved')]
     #[On('subject-saved')]
+    #[On('agenda-saved')]
     public function refreshCourse(): void
     {
         $this->course->refresh();
@@ -53,6 +55,9 @@ class CourseShow extends Component
             'groups' => $subjects->groupBy(fn (Subject $s) => $s->term ?? ''),
             'stats' => $stats,
             'courseStats' => $progress->forCourse($this->course),
+            'agendaItems' => AgendaItem::with(['course', 'subject'])->where('course_id', $this->course->id)
+                ->where(fn ($q) => $q->where('status', 'open')->orWhere('due_on', '>=', now()->subDays(14)->toDateString()))
+                ->orderBy('due_on')->limit(8)->get(),
         ])->title($this->course->name);
     }
 }
