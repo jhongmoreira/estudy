@@ -1,5 +1,9 @@
 # Etapa 1 — Fundação: auth, app shell, design system, tema e PWA
 
+> **Status (17/11/2026):** implementada. Ajustes em relação ao plano: o onboarding ficou com 2 passos (meta diária e dias de estudo);
+> "o que você estuda?" (criar cursos) entra na Etapa 2 e o pedido de permissão de push na Etapa 8. Ícones inline via `App\Support\Icons` + `<x-icon>`
+> (sem arquivo de sprite). `BelongsToUser` volta na Etapa 2, quando houver o primeiro model do usuário.
+
 ## 1.1 Autenticação (Fortify headless, telas próprias)
 - Cadastro, login ("lembrar de mim"), logout, esqueci a senha (SMTP), troca de senha.
 - `REGISTRATION_ENABLED` no `.env`; rate limit 5/min por e-mail+IP.

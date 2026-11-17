@@ -2,6 +2,11 @@
 
 Tabelas: `courses`, `subjects`, `topics` (colunas em [especificacao.md §2](../especificacao.md)).
 
+## 2.0 Pendências vindas da Etapa 1
+- Trazer `app/Models/Concerns/BelongsToUser.php` do Financee.
+- Onboarding: passo "O que você estuda?" (tipos + nomes → cria cursos vazios).
+- Trocar os estados vazios "em breve" da Hoje/Cursos pelos reais.
+
 ## 2.1 Cursos (`/cursos`)
 - Abas: **Em andamento** (`active`), **Planejados**, **Pausados**, **Concluídos/Abandonados**.
 - Card: faixa de cor, emoji, nome, tipo + instituição, barra de progresso, "X h esta semana / meta".

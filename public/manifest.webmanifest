@@ -1,0 +1,23 @@
+{
+    "name": "Estudy",
+    "short_name": "Estudy",
+    "description": "Organize seus estudos: cursos, cronômetro, revisões e metas.",
+    "lang": "pt-BR",
+    "id": "/",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#3047c9",
+    "theme_color": "#f7f4ee",
+    "categories": ["education", "productivity"],
+    "icons": [
+        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+        { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ],
+    "shortcuts": [
+        { "name": "Estudar agora", "url": "/estudar", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+        { "name": "Revisões de hoje", "url": "/revisoes", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+    ]
+}

@@ -1,0 +1,5 @@
+@extends('errors.layout')
+@section('code', '503')
+@section('title', 'Em manutenção')
+@section('message', 'Estamos atualizando o Estudy. Volte em alguns minutos.')
+@section('button', 'Tentar de novo')
