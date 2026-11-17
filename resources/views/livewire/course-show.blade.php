@@ -98,6 +98,22 @@
         @endif
     </section>
 
+    <section class="mt-8 space-y-3" x-data>
+        <div class="flex items-end justify-between gap-3">
+            <h2 class="text-lg font-bold"><span class="highlight">Agenda</span></h2>
+            <button type="button" @click="$dispatch('edit-agenda', { courseId: {{ $course->id }} })" class="tap flex items-center gap-1 text-sm font-semibold text-pen">
+                <x-icon name="plus" class="size-4" /> Adicionar
+            </button>
+        </div>
+        @if ($agendaItems->isEmpty())
+            <p class="rounded-2xl bg-sheet-2 px-4 py-4 text-sm text-ink-soft">Sem provas, trabalhos ou entregas por perto.</p>
+        @else
+            <x-ui.card class="divide-y divide-rule">
+                @foreach ($agendaItems as $item) <x-ui.agenda-row :item="$item" :toggle="false" :show-course="false" /> @endforeach
+            </x-ui.card>
+        @endif
+    </section>
+
     {{-- Zona de perigo --}}
     <div class="mt-10 border-t border-rule pt-6" x-data>
         <button type="button" @click="$dispatch('open-sheet', 'delete-course')" class="tap flex items-center gap-2 text-sm font-semibold text-late">

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Livewire\Concerns\WithUser;
 use App\Models\ActiveTimer;
+use App\Models\AgendaItem;
 use App\Models\Course;
 use App\Models\Review;
 use App\Services\GoalService;
@@ -24,6 +25,7 @@ class Today extends Component
     use WithUser;
 
     #[On('session-saved')]
+    #[On('agenda-saved')]
     public function refreshToday(): void {}
 
     public function render(ProgressService $progress, SessionService $sessions, StreakService $streaks, SuggestionService $suggestions, GoalService $goals): View
@@ -57,6 +59,8 @@ class Today extends Component
             'running' => ActiveTimer::with('subject')->first(),
             'dueReviews' => Review::due()->with(['topic', 'subject.course'])->orderBy('due_on')->limit(5)->get(),
             'dueCount' => Review::due()->count(),
+            'agenda' => AgendaItem::with(['course', 'subject'])->where('status', 'open')
+                ->where('due_on', '<=', $now->addDays(7)->toDateString())->orderBy('due_on')->limit(5)->get(),
             'courses' => $courses,
             'courseStats' => $progress->forCourses($courses),
             'courseWeek' => $goals->weekByCourse($week),

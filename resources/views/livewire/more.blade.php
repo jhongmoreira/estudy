@@ -20,7 +20,7 @@
             <x-ui.list-item icon="clock" label="Sessões de estudo" description="Histórico e registros manuais" :href="route('sessions')" />
             <x-ui.list-item icon="cycle" label="Ciclo de estudos" description="Rodízio de disciplinas com tempo-alvo" :href="route('cycle')" />
             <x-ui.list-item icon="sliders" label="Configurações de estudo" description="Metas, dias de estudo, Pomodoro" :href="route('settings')" />
-            <x-ui.list-item icon="calendar" tone="soft" label="Agenda e notas" description="Em breve" disabled class="cursor-default opacity-55 hover:bg-transparent active:scale-100" />
+            <x-ui.list-item icon="calendar" label="Agenda e notas" description="Provas, trabalhos, entregas e médias" :href="route('agenda')" />
             <x-ui.list-item icon="chart" tone="soft" label="Estatísticas" description="Em breve" disabled class="cursor-default opacity-55 hover:bg-transparent active:scale-100" />
             <x-ui.list-item icon="award" tone="soft" label="Histórico de formação" description="Em breve" disabled class="cursor-default opacity-55 hover:bg-transparent active:scale-100" />
         </x-ui.card>

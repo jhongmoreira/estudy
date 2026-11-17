@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Models\AgendaItem;
 use App\Models\Review;
 use App\Models\StudySession;
 use App\Models\Subject;
 use App\Models\Topic;
+use App\Services\GradeService;
 use App\Services\ProgressService;
 use App\Services\ReviewService;
 use App\Support\Reorder;
@@ -145,6 +147,7 @@ class SubjectShow extends Component
 
     #[On('subject-saved')]
     #[On('session-saved')]
+    #[On('agenda-saved')]
     public function refreshSubject(): void
     {
         $this->subject->refresh()->load('course');
@@ -155,7 +158,7 @@ class SubjectShow extends Component
         return Topic::where('subject_id', $this->subject->id)->findOrFail($id);
     }
 
-    public function render(ProgressService $progress): View
+    public function render(ProgressService $progress, GradeService $grades): View
     {
         $query = $this->subject->topics();
         match ($this->filter) {
@@ -170,6 +173,8 @@ class SubjectShow extends Component
             'stats' => $progress->forSubject($this->subject),
             'course' => $this->subject->course,
             'color' => $this->subject->displayColor(),
+            'agendaItems' => $agenda = AgendaItem::with(['course', 'subject'])->where('subject_id', $this->subject->id)->orderBy('due_on')->get(),
+            'grades' => $grades->summary($this->subject, $agenda),
             'topicReview' => $this->topicId ? Review::pending()->where('topic_id', $this->topicId)->first() : null,
             'recentSessions' => StudySession::with('topic')->where('subject_id', $this->subject->id)->orderByDesc('date')->orderByDesc('id')->limit(5)->get(),
             'sessionTotal' => (int) StudySession::where('subject_id', $this->subject->id)->sum('duration_seconds'),
