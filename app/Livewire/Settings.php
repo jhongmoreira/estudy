@@ -24,6 +24,12 @@ class Settings extends Component
     /** @var array{focus: int, short: int, long: int, every: int} */
     public array $pomodoro = ['focus' => 25, 'short' => 5, 'long' => 15, 'every' => 4];
 
+    public string $review_intervals = '1, 7, 30';
+
+    public bool $reviews_auto = true;
+
+    public int $reviews_per_day = 5;
+
     public function mount(): void
     {
         $user = $this->user();
@@ -32,6 +38,9 @@ class Settings extends Component
         $this->study_days = $user->studyDays();
         $this->week_starts_on = $user->weekStartsOn();
         $this->pomodoro = $user->pomodoro();
+        $this->review_intervals = implode(', ', $user->reviewIntervals());
+        $this->reviews_auto = (bool) $user->setting('reviews_auto');
+        $this->reviews_per_day = (int) $user->setting('reviews_per_day');
     }
 
     public function toggleDay(int $day): void
@@ -41,8 +50,22 @@ class Settings extends Component
             ->map(fn ($d) => (int) $d)->sort()->values()->all();
     }
 
+    public function usePreset(string $preset): void
+    {
+        $this->review_intervals = $preset;
+    }
+
     public function save(): void
     {
+        $intervals = array_values(array_filter(array_map('intval', preg_split('/[^0-9]+/', $this->review_intervals) ?: [])));
+        $sorted = $intervals;
+        sort($sorted);
+        if ($intervals === [] || count($intervals) > 6 || max($intervals) > 365 || $sorted !== $intervals) {
+            $this->addError('review_intervals', 'Informe de 1 a 6 intervalos em dias, em ordem crescente (ex.: 1, 7, 30).');
+
+            return;
+        }
+
         $data = $this->validate([
             'daily_goal_min' => ['required', 'integer', 'min:5', 'max:720'],
             'streak_min' => ['required', 'integer', 'min:1', 'lte:daily_goal_min'],
@@ -53,6 +76,8 @@ class Settings extends Component
             'pomodoro.short' => ['required', 'integer', 'min:1', 'max:30'],
             'pomodoro.long' => ['required', 'integer', 'min:5', 'max:60'],
             'pomodoro.every' => ['required', 'integer', 'min:2', 'max:8'],
+            'reviews_auto' => ['boolean'],
+            'reviews_per_day' => ['required', 'integer', 'min:1', 'max:50'],
         ], attributes: [
             'daily_goal_min' => 'meta diária',
             'streak_min' => 'mínimo para a sequência',
@@ -61,6 +86,7 @@ class Settings extends Component
         ]);
 
         $data['pomodoro'] = array_map('intval', $data['pomodoro']);
+        $data['review_intervals'] = $intervals;
         $this->user()->updateSettings($data);
         $this->dispatch('toast', message: 'Configurações salvas.');
     }

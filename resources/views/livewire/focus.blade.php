@@ -70,7 +70,7 @@
                     <div class="flex flex-wrap gap-2">
                         @foreach (\App\Models\StudySession::KINDS as $key => [$label, $icon])
                             <label class="tap flex cursor-pointer items-center gap-1.5 rounded-full border-2 border-rule px-3 py-1.5 text-sm font-semibold has-[:checked]:border-pen has-[:checked]:bg-pen-soft has-[:checked]:text-pen">
-                                <input type="radio" value="{{ $key }}" wire:model="kind" class="sr-only"><x-icon :name="$icon" class="size-4" /> {{ $label }}
+                                <input type="radio" value="{{ $key }}" wire:model.live="kind" class="sr-only"><x-icon :name="$icon" class="size-4" /> {{ $label }}
                             </label>
                         @endforeach
                     </div>
@@ -84,6 +84,19 @@
                             <span class="text-sm font-semibold">Terminei este tópico</span>
                         </label>
                     @endif
+                @endif
+
+                @if ($kind === 'review' && $pendingReview)
+                    <div>
+                        <p class="mb-1.5 text-sm font-semibold">Como foi a revisão?</p>
+                        <div class="grid grid-cols-3 gap-2">
+                            @foreach (\App\Models\Review::RATINGS as $key => [$label, $emoji])
+                                <label class="tap flex cursor-pointer flex-col items-center gap-1 rounded-xl border-2 border-rule px-2 py-2 text-center text-xs font-semibold has-[:checked]:border-pen has-[:checked]:bg-pen-soft has-[:checked]:text-pen">
+                                    <input type="radio" value="{{ $key }}" wire:model="reviewRating" class="sr-only"><span class="text-xl">{{ $emoji }}</span>{{ $label }}
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
                 @endif
 
                 <div class="grid grid-cols-3 gap-3">

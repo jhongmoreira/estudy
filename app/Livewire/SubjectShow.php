@@ -2,11 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Models\Review;
 use App\Models\StudySession;
 use App\Models\Subject;
 use App\Models\Topic;
 use App\Services\ProgressService;
+use App\Services\ReviewService;
 use App\Support\Reorder;
+use Carbon\CarbonImmutable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
@@ -113,6 +116,18 @@ class SubjectShow extends Component
         $this->dispatch('toast', message: 'Tópico salvo.');
     }
 
+    public function reviewTopicOn(string $when, ReviewService $reviews): void
+    {
+        $today = CarbonImmutable::today();
+        $date = match ($when) {
+            'today' => $today,
+            'tomorrow' => $today->addDay(),
+            default => $today->addWeek(),
+        };
+        $reviews->scheduleManually($this->topic((int) $this->topicId), $date);
+        $this->dispatch('toast', message: 'Revisão agendada para '.$date->translatedFormat('j \\d\\e M').'.');
+    }
+
     public function deleteTopic(): void
     {
         $this->topic((int) $this->topicId)->delete();
@@ -155,6 +170,7 @@ class SubjectShow extends Component
             'stats' => $progress->forSubject($this->subject),
             'course' => $this->subject->course,
             'color' => $this->subject->displayColor(),
+            'topicReview' => $this->topicId ? Review::pending()->where('topic_id', $this->topicId)->first() : null,
             'recentSessions' => StudySession::with('topic')->where('subject_id', $this->subject->id)->orderByDesc('date')->orderByDesc('id')->limit(5)->get(),
             'sessionTotal' => (int) StudySession::where('subject_id', $this->subject->id)->sum('duration_seconds'),
             'sessionCount' => StudySession::where('subject_id', $this->subject->id)->count(),

@@ -29,6 +29,28 @@
             </x-ui.card>
         </x-ui.section>
 
+        <x-ui.section title="Revisões">
+            <x-ui.card class="space-y-4 p-4">
+                <label class="flex cursor-pointer items-center gap-3">
+                    <span class="min-w-0 flex-1">
+                        <span class="block font-semibold">Agendar revisões automaticamente</span>
+                        <span class="block text-sm text-ink-soft">Ao estudar um tópico pela primeira vez.</span>
+                    </span>
+                    <input type="checkbox" wire:model="reviews_auto" class="peer sr-only">
+                    <span class="relative h-7 w-12 shrink-0 rounded-full bg-rule transition peer-checked:bg-pen after:absolute after:left-1 after:top-1 after:size-5 after:rounded-full after:bg-white after:transition peer-checked:after:translate-x-5"></span>
+                </label>
+                <div>
+                    <x-ui.input label="Intervalos (dias depois de estudar)" name="review_intervals" wire:model="review_intervals" placeholder="1, 7, 30" />
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        @foreach (['1, 7, 30', '1, 3, 7, 15, 30', '2, 7, 21, 60', '1, 7, 30, 90'] as $preset)
+                            <button type="button" wire:click="usePreset('{{ $preset }}')" class="tap rounded-full bg-sheet-2 px-3 py-1 text-sm font-semibold text-ink-soft hover:text-ink">{{ $preset }}</button>
+                        @endforeach
+                    </div>
+                </div>
+                <x-ui.input label="Máximo por dia ao reagendar atrasadas" name="reviews_per_day" type="number" inputmode="numeric" min="1" wire:model="reviews_per_day" />
+            </x-ui.card>
+        </x-ui.section>
+
         <x-ui.section title="Pomodoro">
             <x-ui.card class="space-y-3 p-4">
                 <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">

@@ -32,6 +32,9 @@ class User extends Authenticatable
         'study_days' => [1, 2, 3, 4, 5, 6], // 0 = domingo
         'week_starts_on' => 1,            // 0 = domingo, 1 = segunda
         'pomodoro' => ['focus' => 25, 'short' => 5, 'long' => 15, 'every' => 4], // minutos; pausa longa a cada N focos
+        'review_intervals' => [1, 7, 30], // dias entre as revisões
+        'reviews_auto' => true,           // agendar revisões ao estudar um tópico
+        'reviews_per_day' => 5,           // limite ao reagendar atrasadas
     ];
 
     public const THEMES = ['system', 'light', 'dark'];
@@ -124,6 +127,14 @@ class User extends Authenticatable
             'long' => max(5, min(60, (int) $p['long'])),
             'every' => max(2, min(8, (int) $p['every'])),
         ];
+    }
+
+    /** @return list<int> */
+    public function reviewIntervals(): array
+    {
+        $values = array_values(array_filter(array_map('intval', (array) $this->setting('review_intervals')), fn (int $d) => $d >= 1 && $d <= 365));
+
+        return array_slice($values, 0, 6) ?: [1, 7, 30];
     }
 
     public function weekStartsOn(): int

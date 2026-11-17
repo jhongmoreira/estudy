@@ -86,6 +86,18 @@
         </x-ui.card>
     </x-ui.section>
 
+    @if ($dueCount > 0)
+        <x-ui.section title="Revisões de hoje" :action="$dueCount > 5 ? 'Ver todas ('.$dueCount.')' : 'Abrir'" :action-href="route('reviews')">
+            <x-ui.card class="divide-y divide-rule">
+                @foreach ($dueReviews as $r)
+                    <x-ui.review-row :review="$r" :steps="count($user->reviewIntervals())">
+                        <a href="{{ route('study', ['topico' => $r->topic_id, 'tipo' => 'review']) }}" wire:navigate class="tap grid size-9 shrink-0 place-items-center rounded-xl bg-pen text-white dark:text-[#14161c]" aria-label="Revisar"><x-icon name="play" class="size-4" /></a>
+                    </x-ui.review-row>
+                @endforeach
+            </x-ui.card>
+        </x-ui.section>
+    @endif
+
     <x-ui.section title="Em andamento" :action="$courses->isNotEmpty() ? 'Ver todos' : null" :action-href="route('courses')">
         @if ($courses->isEmpty())
             <x-ui.empty icon="cap" title="Nenhum curso por aqui ainda"
