@@ -12,6 +12,7 @@ use App\Services\StreakService;
 use App\Services\SuggestionService;
 use App\Support\Week;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
 
 beforeEach(function () {
@@ -151,4 +152,9 @@ it('sugere o que estudar: ciclo, metas e continuar', function () {
         ->and(collect($s)->firstWhere('topic_id', $topic->id)['reason'])->toBe('Continuar de onde parou');
 
     $this->get('/')->assertSee('O que estudar agora')->assertSee('Células');
+});
+
+it('o calendário reserva margem para o contorno do dia de hoje', function () {
+    $html = Blade::render('<x-ui.heatmap :weeks="8" />');
+    expect($html)->toContain('viewBox="-2 -2')->toContain('stroke="var(--pen)"');
 });
