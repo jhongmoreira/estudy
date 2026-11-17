@@ -8,7 +8,7 @@ Mais leve que o Financee: sem chart.js (gráficos SVG no Blade), sem dompdf, sem
 Idioma do app, commits e conversa: **português do Brasil**.
 
 ## Status
-Planejamento concluído (17/11/2026). Começar pela Etapa 0. Plano: `docs/plano-geral.md`.
+Etapa 0 concluída (17/11/2026): Laravel no ar com deploy automático. Próxima: Etapa 1 (fundação). Plano: `docs/plano-geral.md`.
 
 ## Fluxo de trabalho
 - Antes de publicar: `php artisan test`, `./vendor/bin/phpstan analyse --memory-limit=1G`, `./vendor/bin/pint`.

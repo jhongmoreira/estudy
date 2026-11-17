@@ -1,6 +1,6 @@
 # Estudy — Plano Geral
 
-> **Status (17/11/2026):** planejamento. Nenhuma etapa implementada.
+> **Status (17/11/2026):** Etapa 0 concluída (deploy em https://estudy.jgmoreira.com.br). Próxima: Etapa 1.
 
 PWA de **organização de estudos pessoais**, mobile-first: cursos, disciplinas e tópicos cadastrados pelo
 próprio usuário, cronômetro, registro de sessões, revisões espaçadas, metas semanais, prazos/notas e estatísticas.
