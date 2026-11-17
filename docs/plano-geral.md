@@ -1,6 +1,6 @@
 # Estudy — Plano Geral
 
-> **Status (17/11/2026):** Etapas 0 a 6 concluídas (https://estudy.jgmoreira.com.br). Próxima: Etapa 7 (estatísticas e formação).
+> **Status (17/11/2026):** Etapas 0 a 7 concluídas (https://estudy.jgmoreira.com.br). Próxima: Etapa 8 (notificações push).
 
 PWA de **organização de estudos pessoais**, mobile-first: cursos, disciplinas e tópicos cadastrados pelo
 próprio usuário, cronômetro, registro de sessões, revisões espaçadas, metas semanais, prazos/notas e estatísticas.

@@ -21,8 +21,8 @@
             <x-ui.list-item icon="cycle" label="Ciclo de estudos" description="Rodízio de disciplinas com tempo-alvo" :href="route('cycle')" />
             <x-ui.list-item icon="sliders" label="Configurações de estudo" description="Metas, dias de estudo, Pomodoro" :href="route('settings')" />
             <x-ui.list-item icon="calendar" label="Agenda e notas" description="Provas, trabalhos, entregas e médias" :href="route('agenda')" />
-            <x-ui.list-item icon="chart" tone="soft" label="Estatísticas" description="Em breve" disabled class="cursor-default opacity-55 hover:bg-transparent active:scale-100" />
-            <x-ui.list-item icon="award" tone="soft" label="Histórico de formação" description="Em breve" disabled class="cursor-default opacity-55 hover:bg-transparent active:scale-100" />
+            <x-ui.list-item icon="chart" label="Estatísticas" description="Tempo, rendimento, acertos e dificuldades" :href="route('stats')" />
+            <x-ui.list-item icon="award" label="Histórico de formação" description="Cursos concluídos, horas e certificados" :href="route('formation')" />
         </x-ui.card>
     </x-ui.section>
 

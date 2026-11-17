@@ -1,5 +1,9 @@
 # Etapa 7 — Estatísticas (gráficos em SVG) e histórico de formação
 
+> **Status (17/11/2026):** implementada. Barras e rankings são HTML/CSS puro; rosca e calendário em SVG — nenhum JS de gráfico.
+> Rendimento por período usa o horário das sessões (`started_at`). Certificados ficam em `storage/app/private/certificates/{user}`
+> (disco `local`), baixados por `/formacao/certificado/{curso}`; o arquivo é apagado junto com o certificado ou o curso.
+
 ## 7.1 Gráficos sem biblioteca
 Componentes Blade que geram SVG no servidor (`resources/views/components/chart/`), com tokens de cor, `<title>` para tooltip nativo e tabela acessível escondida:
 - `chart.bars` (verticais, opcionalmente empilhadas por curso), `chart.hbars` (ranking), `chart.donut`, `chart.heatmap`, `chart.line` (simples, para tendência).
