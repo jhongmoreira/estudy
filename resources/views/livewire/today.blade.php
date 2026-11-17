@@ -33,11 +33,11 @@
                         Ainda não começou
                     @endif
                 </p>
-                <p class="mt-2 flex items-center gap-1.5 text-sm">
-                    <x-icon name="flame" @class(['size-5', 'text-[#ea580c]' => $streak['current'] > 0, 'text-ink-soft' => $streak['current'] === 0]) />
+                <p class="mt-2 text-sm">
+                    <x-icon name="flame" @class(['-mt-1 mr-0.5 inline size-5', 'text-[#ea580c]' => $streak['current'] > 0, 'text-ink-soft' => $streak['current'] === 0]) />
                     @if ($streak['current'] > 0)
                         <strong>{{ $streak['current'] }} {{ $streak['current'] === 1 ? 'dia seguido' : 'dias seguidos' }}</strong>
-                        @unless ($streak['today_counts'])<span class="text-ink-soft">· estude {{ $streakMin }} min hoje</span>@endunless
+                        @unless ($streak['today_counts'])<span class="text-ink-soft"> · estude {{ $streakMin }} min hoje</span>@endunless
                     @else
                         <span class="text-ink-soft">Comece uma sequência hoje</span>
                     @endif
