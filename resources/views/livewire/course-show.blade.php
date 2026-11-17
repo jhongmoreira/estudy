@@ -29,7 +29,7 @@
             </dl>
         </div>
         <div class="mt-4 flex flex-wrap gap-2">
-            <x-ui.button :href="route('study')" icon="play" class="flex-1 !py-2.5">Estudar</x-ui.button>
+            <x-ui.button :href="route('study', ['curso' => $course->id])" icon="play" class="flex-1 !py-2.5">Estudar</x-ui.button>
             @if ($course->url)
                 <x-ui.button :href="$course->url" :navigate="false" variant="secondary" icon="link" class="!py-2.5" target="_blank" rel="noopener">Abrir</x-ui.button>
             @endif

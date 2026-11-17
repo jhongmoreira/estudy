@@ -31,18 +31,29 @@
             </div>
         </x-ui.card>
 
-        <a href="{{ route('study') }}" wire:navigate
+        <a href="{{ $running ? route('focus') : route('study') }}" wire:navigate
            class="tap group relative flex items-center justify-between overflow-hidden rounded-2xl bg-pen p-5 text-white dark:text-[#14161c]">
             <span>
-                <span class="block text-sm font-semibold uppercase tracking-wide opacity-80">Pronto para focar?</span>
-                <span class="mt-1 block font-display text-2xl font-bold">Estudar agora</span>
-                <span class="mt-1 block text-sm opacity-80">Cronômetro, Pomodoro ou registro manual</span>
+                @if ($running)
+                    <span class="block text-sm font-semibold uppercase tracking-wide opacity-80">Cronômetro ligado</span>
+                    <span class="mt-1 block font-display text-2xl font-bold">Continuar estudando</span>
+                    <span class="mt-1 block truncate text-sm opacity-80">{{ $running->subject->name }}</span>
+                @else
+                    <span class="block text-sm font-semibold uppercase tracking-wide opacity-80">Pronto para focar?</span>
+                    <span class="mt-1 block font-display text-2xl font-bold">Estudar agora</span>
+                    <span class="mt-1 block text-sm opacity-80">Cronômetro com modo foco e Pomodoro</span>
+                @endif
             </span>
             <span class="grid size-16 shrink-0 place-items-center rounded-2xl bg-white/15 transition group-hover:scale-105">
                 <x-icon name="play" class="size-8 translate-x-0.5" />
             </span>
             <span class="pointer-events-none absolute -bottom-6 -right-6 size-28 rounded-full bg-marker/25"></span>
         </a>
+    </div>
+
+    <div class="-mt-4 flex justify-end gap-4 text-sm font-semibold" x-data>
+        <a href="{{ route('sessions') }}" wire:navigate class="text-ink-soft hover:text-ink">Histórico</a>
+        <button type="button" @click="$dispatch('log-session', {})" class="text-pen">+ Registrar estudo feito fora</button>
     </div>
 
     {{-- Semana: constância de relance --}}
@@ -53,13 +64,18 @@
                     @php
                         $isToday = $day->isSameDay($today);
                         $studyDay = $user->studiesOn($day);
+                        $secs = $daily[$day->toDateString()] ?? 0;
+                        $counted = $secs >= (int) $user->setting('streak_min') * 60;
                     @endphp
                     <div class="flex flex-col items-center gap-1.5">
                         <span @class(['text-xs font-semibold uppercase', 'text-pen' => $isToday, 'text-ink-soft' => ! $isToday])>{{ $weekdays[(int) $day->format('w')] }}</span>
                         <span @class(['grid size-10 place-items-center rounded-xl font-display font-bold',
-                                      'bg-pen text-white dark:text-[#14161c]' => $isToday,
-                                      'border-2 border-dashed border-rule text-ink-soft' => ! $isToday && $studyDay,
-                                      'text-ink-soft/50' => ! $isToday && ! $studyDay])>{{ $day->day }}</span>
+                                      'bg-marker text-[#1f2a44]' => $counted,
+                                      'ring-2 ring-pen ring-offset-2 ring-offset-sheet' => $isToday,
+                                      'bg-pen text-white dark:text-[#14161c]' => $isToday && ! $counted,
+                                      'border-2 border-dashed border-rule text-ink-soft' => ! $isToday && ! $counted && $studyDay,
+                                      'text-ink-soft/50' => ! $isToday && ! $counted && ! $studyDay])>{{ $day->day }}</span>
+                        <span class="h-4 text-[11px] font-semibold text-ink-soft">{{ $secs > 0 ? \App\Support\Duration::short($secs) : '' }}</span>
                     </div>
                 @endforeach
             </div>

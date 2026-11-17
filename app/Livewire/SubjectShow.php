@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\StudySession;
 use App\Models\Subject;
 use App\Models\Topic;
 use App\Services\ProgressService;
@@ -128,6 +129,7 @@ class SubjectShow extends Component
     }
 
     #[On('subject-saved')]
+    #[On('session-saved')]
     public function refreshSubject(): void
     {
         $this->subject->refresh()->load('course');
@@ -153,6 +155,9 @@ class SubjectShow extends Component
             'stats' => $progress->forSubject($this->subject),
             'course' => $this->subject->course,
             'color' => $this->subject->displayColor(),
+            'recentSessions' => StudySession::with('topic')->where('subject_id', $this->subject->id)->orderByDesc('date')->orderByDesc('id')->limit(5)->get(),
+            'sessionTotal' => (int) StudySession::where('subject_id', $this->subject->id)->sum('duration_seconds'),
+            'sessionCount' => StudySession::where('subject_id', $this->subject->id)->count(),
         ])->title($this->subject->name);
     }
 }

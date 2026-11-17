@@ -19,6 +19,14 @@ final class Duration
         return $rest === 0 ? $hours.'h' : sprintf('%dh%02d', $hours, $rest);
     }
 
+    /** Compacto para espaços pequenos: "25m", "1h05", "2h". */
+    public static function short(int $seconds): string
+    {
+        $minutes = intdiv(max(0, $seconds), 60);
+
+        return $minutes < 60 ? $minutes.'m' : self::human($seconds);
+    }
+
     /** "00:42:17" (relógio). */
     public static function clock(int $seconds): string
     {

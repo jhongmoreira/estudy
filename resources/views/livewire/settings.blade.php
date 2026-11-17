@@ -29,6 +29,18 @@
             </x-ui.card>
         </x-ui.section>
 
+        <x-ui.section title="Pomodoro">
+            <x-ui.card class="space-y-3 p-4">
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <x-ui.input label="Foco" name="pomodoro.focus" type="number" inputmode="numeric" wire:model="pomodoro.focus" suffix="min" />
+                    <x-ui.input label="Pausa curta" name="pomodoro.short" type="number" inputmode="numeric" wire:model="pomodoro.short" suffix="min" />
+                    <x-ui.input label="Pausa longa" name="pomodoro.long" type="number" inputmode="numeric" wire:model="pomodoro.long" suffix="min" />
+                    <x-ui.input label="Longa a cada" name="pomodoro.every" type="number" inputmode="numeric" wire:model="pomodoro.every" suffix="focos" />
+                </div>
+                <p class="text-sm text-ink-soft">No modo Pomodoro o cronômetro pausa sozinho ao fim de cada foco; o tempo de pausa não conta como estudo.</p>
+            </x-ui.card>
+        </x-ui.section>
+
         <x-ui.button class="w-full" icon="check">Salvar</x-ui.button>
     </form>
 </div>
