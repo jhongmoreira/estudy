@@ -1,0 +1,6 @@
+@extends('errors.layout')
+@section('code', '419')
+@section('title', 'Sessão expirada')
+@section('message', 'Ficou um tempo parado por aqui. Recarregue e tente de novo.')
+@section('button', 'Recarregar')
+@section('link', url()->previous())

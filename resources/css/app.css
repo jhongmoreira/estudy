@@ -4,6 +4,136 @@
 @source '../js/**/*.js';
 @source '../../app/**/*.php';
 
-@theme {
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+| Estudy — "caderno + marca-texto" (docs/design.md).
+| As telas usam bg-paper, bg-sheet, text-ink, text-pen, bg-marker...; o tema
+| escuro só redefine as variáveis.
+*/
+:root {
+    --paper: #f7f4ee;
+    --sheet: #ffffff;
+    --sheet-2: #f1ede4;
+    --rule: #e4ded1;
+    --ink: #1f2a44;
+    --ink-soft: #5b6478;
+    --pen: #3047c9;
+    --pen-strong: #2236a8;
+    --pen-soft: #e3e8ff;
+    --marker: #ffe066;
+    --marker-ink: #5c4a00;
+    --late: #c2410c;
+    --done: #2f855a;
+    color-scheme: light;
+}
+
+.dark {
+    --paper: #14161c;
+    --sheet: #1c1f27;
+    --sheet-2: #242833;
+    --rule: #2e3340;
+    --ink: #e8eaf0;
+    --ink-soft: #9aa3b5;
+    --pen: #8ea0ff;
+    --pen-strong: #b3c0ff;
+    --pen-soft: #262e5c;
+    --marker: #c9a400;
+    --marker-ink: #fff6cc;
+    --late: #fb923c;
+    --done: #68d391;
+    color-scheme: dark;
+}
+
+@theme inline {
     --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-display: ui-rounded, 'SF Pro Rounded', 'Nunito', 'Varela Round', system-ui, sans-serif;
+    --color-paper: var(--paper);
+    --color-sheet: var(--sheet);
+    --color-sheet-2: var(--sheet-2);
+    --color-rule: var(--rule);
+    --color-ink: var(--ink);
+    --color-ink-soft: var(--ink-soft);
+    --color-pen: var(--pen);
+    --color-pen-strong: var(--pen-strong);
+    --color-pen-soft: var(--pen-soft);
+    --color-marker: var(--marker);
+    --color-marker-ink: var(--marker-ink);
+    --color-late: var(--late);
+    --color-done: var(--done);
+}
+
+@utility pt-safe {
+    padding-top: env(safe-area-inset-top);
+}
+
+@utility pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Sublinhado de marca-texto: <span class="highlight">Hoje</span> */
+@utility highlight {
+    background-image: linear-gradient(transparent 58%, color-mix(in srgb, var(--marker) 75%, transparent) 58%, color-mix(in srgb, var(--marker) 75%, transparent) 92%, transparent 92%);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding-inline: 0.1em;
+}
+
+/* Pauta sutil de caderno (topo das folhas) */
+@utility ruled {
+    background-image: repeating-linear-gradient(to bottom, transparent 0 27px, color-mix(in srgb, var(--rule) 70%, transparent) 27px 28px);
+}
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        overscroll-behavior-y: none;
+        font-variant-numeric: tabular-nums;
+    }
+
+    h1, h2, h3, .font-display {
+        font-family: var(--font-display);
+        letter-spacing: -0.01em;
+    }
+
+    /* Evita zoom automático do iOS em campos de formulário */
+    input, select, textarea {
+        font-size: 16px;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--pen);
+        outline-offset: 2px;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+/* Feedback de toque */
+.tap {
+    @apply transition active:scale-[0.97] active:opacity-85 select-none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Campos numéricos sem as setinhas do navegador */
+input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
