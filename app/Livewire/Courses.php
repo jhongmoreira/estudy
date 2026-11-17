@@ -3,8 +3,10 @@
 namespace App\Livewire;
 
 use App\Models\Course;
+use App\Services\GoalService;
 use App\Services\ProgressService;
 use App\Support\Reorder;
+use App\Support\Week;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
@@ -51,7 +53,7 @@ class Courses extends Component
     #[On('course-saved')]
     public function refreshList(): void {}
 
-    public function render(ProgressService $progress): View
+    public function render(ProgressService $progress, GoalService $goals): View
     {
         $courses = Course::query()->whereIn('status', self::TABS[$this->tab][1])->ordered()->get();
         $counts = Course::query()->selectRaw('status, COUNT(*) as total')->groupBy('status')->pluck('total', 'status');
@@ -59,6 +61,7 @@ class Courses extends Component
         return view('livewire.courses', [
             'courses' => $courses,
             'stats' => $progress->forCourses($courses),
+            'courseWeek' => $goals->weekByCourse(Week::of(now(), auth()->user()?->weekStartsOn() ?? 1)),
             'tabCounts' => collect(self::TABS)->map(fn ($t) => collect($t[1])->sum(fn ($s) => (int) ($counts[$s] ?? 0))),
         ]);
     }

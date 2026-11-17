@@ -37,7 +37,7 @@
         <div class="grid gap-3 sm:grid-cols-2">
             @foreach ($courses as $item)
                 <div class="flex min-w-0 items-stretch gap-2" wire:key="course-{{ $item->id }}">
-                    <x-ui.course-card :course="$item" :stats="$stats[$item->id]" class="flex-1" />
+                    <x-ui.course-card :course="$item" :stats="$stats[$item->id]" :week="$courseWeek[$item->id] ?? 0" class="flex-1" />
                     @if ($organizing)
                         <div class="flex flex-col justify-center gap-1">
                             <button type="button" wire:click="move({{ $item->id }}, -1)" @disabled($loop->first) class="tap rounded-xl border border-rule bg-sheet p-2 disabled:opacity-30" aria-label="Subir"><x-icon name="arrow-up" class="size-4" /></button>

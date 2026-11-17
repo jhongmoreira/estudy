@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\DateOnly;
 use App\Models\Concerns\BelongsToUser;
+use App\Services\StreakService;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,6 +51,13 @@ class StudySession extends Model
         'course_id', 'subject_id', 'topic_id', 'date', 'started_at', 'duration_seconds', 'kind',
         'pages', 'questions_total', 'questions_correct', 'source', 'notes',
     ];
+
+    protected static function booted(): void
+    {
+        $forget = fn (StudySession $s) => StreakService::forget($s->user_id);
+        static::saved($forget);
+        static::deleted($forget);
+    }
 
     protected function casts(): array
     {
