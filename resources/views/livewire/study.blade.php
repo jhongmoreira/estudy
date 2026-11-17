@@ -11,6 +11,17 @@
         </x-ui.empty>
     @elseif (! $subject)
         {{-- Passo 1: escolher a disciplina/módulo --}}
+        @if ($cycleItem && ! $courseId)
+            <button type="button" wire:click="chooseSubject({{ $cycleItem->subject_id }})"
+                    class="tap mb-3 flex w-full items-center gap-4 rounded-2xl border-2 border-marker bg-marker/20 p-4 text-left">
+                <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-marker text-[#1f2a44]"><x-icon name="cycle" class="size-6" /></span>
+                <span class="min-w-0">
+                    <span class="block text-xs font-semibold uppercase tracking-wide text-marker-ink">Próximo do ciclo · faltam {{ \App\Support\Duration::human($cycleItem->remainingSeconds()) }}</span>
+                    <span class="block truncate font-display text-lg font-bold">{{ $cycleItem->subject->name }}</span>
+                    <span class="block truncate text-sm text-ink-soft">{{ $cycleItem->subject->course->name }}</span>
+                </span>
+            </button>
+        @endif
         @if ($last && ! $courseId)
             <button type="button" wire:click="continueLast({{ $last->subject_id }}, {{ $last->topic_id && $last->topic?->status !== 'done' ? $last->topic_id : 'null' }})"
                     class="tap mb-6 flex w-full items-center gap-4 rounded-2xl border-2 border-dashed border-pen/40 bg-pen-soft/50 p-4 text-left">

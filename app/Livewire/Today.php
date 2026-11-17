@@ -6,8 +6,11 @@ use App\Livewire\Concerns\WithUser;
 use App\Models\ActiveTimer;
 use App\Models\Course;
 use App\Models\Review;
+use App\Services\GoalService;
 use App\Services\ProgressService;
 use App\Services\SessionService;
+use App\Services\StreakService;
+use App\Services\SuggestionService;
 use App\Support\Week;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\View\View;
@@ -23,13 +26,11 @@ class Today extends Component
     #[On('session-saved')]
     public function refreshToday(): void {}
 
-    public function render(ProgressService $progress, SessionService $sessions): View
+    public function render(ProgressService $progress, SessionService $sessions, StreakService $streaks, SuggestionService $suggestions, GoalService $goals): View
     {
         $user = $this->user();
-        $courses = Course::query()->where('status', 'active')->ordered()->limit(6)->get();
         $now = CarbonImmutable::now();
         $hour = (int) $now->format('G');
-
         $greeting = match (true) {
             $hour < 5 => 'Boa madrugada',
             $hour < 12 => 'Bom dia',
@@ -38,21 +39,27 @@ class Today extends Component
         };
 
         $week = Week::of($now, $user->weekStartsOn());
-        $daily = $sessions->dailyTotals($week->start, $week->end);
+        $heatStart = $week->end->subDays(8 * 7 - 1);
+        $daily = $sessions->dailyTotals($heatStart, $week->end);
+        $courses = Course::query()->where('status', 'active')->ordered()->limit(6)->get();
 
         return view('livewire.today', [
-            'daily' => $daily,
-            'running' => ActiveTimer::with('subject')->first(),
-            'dueReviews' => Review::due()->with(['topic', 'subject.course'])->orderBy('due_on')->limit(5)->get(),
-            'dueCount' => Review::due()->count(),
             'user' => $user,
             'greeting' => $greeting,
             'today' => $now,
             'goalMinutes' => $user->dailyGoalMinutes(),
             'todaySeconds' => $daily[$now->toDateString()] ?? 0,
+            'weekSeconds' => array_sum(array_filter($daily, fn ($k) => $k >= $week->start->toDateString(), ARRAY_FILTER_USE_KEY)),
             'week' => $week,
+            'daily' => $daily,
+            'streak' => $streaks->for($user),
+            'suggestions' => $suggestions->forToday($week),
+            'running' => ActiveTimer::with('subject')->first(),
+            'dueReviews' => Review::due()->with(['topic', 'subject.course'])->orderBy('due_on')->limit(5)->get(),
+            'dueCount' => Review::due()->count(),
             'courses' => $courses,
             'courseStats' => $progress->forCourses($courses),
+            'courseWeek' => $goals->weekByCourse($week),
         ]);
     }
 }

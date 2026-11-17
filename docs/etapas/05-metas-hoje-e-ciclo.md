@@ -2,6 +2,11 @@
 
 Regras em [especificacao.md §3.5–3.7](../especificacao.md).
 
+> **Status (17/11/2026):** implementada. Ciclo: um ciclo por usuário (pode pausar/ativar); a sobra de uma sessão vai para o
+> próximo bloco incompleto da mesma disciplina. O assistente distribui as horas por peso em blocos intercalados de até N minutos.
+> Editar/excluir sessões antigas não recalcula o ciclo. A sequência fica em cache por dia e é invalidada ao salvar/excluir sessões.
+> As sugestões de prazos (agenda) entram na Etapa 6.
+
 ## 5.1 Metas
 - Meta diária (configurações) e metas semanais por curso e por disciplina (formulários da etapa 2 ganham o campo).
 - `GoalService`: minutos de hoje, da semana por curso/disciplina, déficit proporcional ("deveria ter 2h40 até quarta, tem 1h50").
