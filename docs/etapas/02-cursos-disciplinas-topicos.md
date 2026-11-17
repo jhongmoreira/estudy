@@ -2,6 +2,10 @@
 
 Tabelas: `courses`, `subjects`, `topics` (colunas em [especificacao.md §2](../especificacao.md)).
 
+> **Status (17/11/2026):** implementada. Ajuste: em vez de arrastar, a ordem muda no modo **Organizar** (setas ↑↓) — arrastar no
+> celular exigiria SortableJS (~45 kB), contra a meta de app leve. Formulários de curso, disciplina e "colar lista" são
+> componentes Livewire únicos (`CourseForm`, `SubjectForm`, `PasteList`) carregados no layout e abertos por eventos.
+
 ## 2.0 Pendências vindas da Etapa 1
 - Trazer `app/Models/Concerns/BelongsToUser.php` do Financee.
 - Onboarding: passo "O que você estuda?" (tipos + nomes → cria cursos vazios).

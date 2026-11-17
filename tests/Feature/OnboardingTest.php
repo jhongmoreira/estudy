@@ -9,9 +9,10 @@ it('salva meta e dias de estudo e libera o app', function () {
     $this->actingAs($user);
 
     Livewire::test(Onboarding::class)
+        ->call('next')
         ->call('setGoal', 120)
         ->call('next')
-        ->assertSet('step', 2)
+        ->assertSet('step', 3)
         ->call('toggleDay', 6) // tira o sábado
         ->call('finish')
         ->assertRedirect(route('home'));

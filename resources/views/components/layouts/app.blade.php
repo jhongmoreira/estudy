@@ -90,6 +90,11 @@
     </x-ui.sheet>
     @endpersist
 
+    {{-- Folhas de cadastro, abertas por eventos (edit-course, edit-subject, paste-list) --}}
+    <livewire:course-form />
+    <livewire:subject-form />
+    <livewire:paste-list />
+
     <x-ui.toasts />
 </body>
 </html>
