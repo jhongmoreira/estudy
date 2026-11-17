@@ -51,4 +51,5 @@ Teste em https://estudy.jgmoreira.com.br/forgot-password.
 - **Não altere a versão do PHP pelo painel**: o cPanel reescreve `public/.htaccess` e trava o deploy ("arquivos alterados manualmente").
   Se acontecer: `cd ~/public_html/estudy && git status && git checkout -- public/.htaccess` e refaça o deploy.
 - Logo após cada release, por até 1 minuto, telas novas podem dar 404 até o cron renovar o cache de rotas.
-- Deploy: `scripts/release.sh` (testes + Larastan + build + PR para `production` com merge automático).
+- Deploy: `scripts/release.sh` (testes + Larastan + build + PR para `production` com merge automático). A branch `release/*` é apagada no GitHub depois do merge (sem `--delete-branch`, que falha por causa do worktree temporário).
+- As duas correções de deploy (ordem do post-deploy e remoção da branch `release/*`) também foram aplicadas no Financee em 17/11/2026.
