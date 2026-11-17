@@ -5,7 +5,13 @@
 @endphp
 <div class="space-y-8" x-data>
     <header class="pt-6 lg:pt-10">
-        <p class="text-sm font-medium text-ink-soft">{{ \Illuminate\Support\Str::ucfirst($today->translatedFormat('l, j \d\e F')) }}</p>
+        <div class="flex items-center justify-between gap-3">
+            <p class="text-sm font-medium text-ink-soft">{{ \Illuminate\Support\Str::ucfirst($today->translatedFormat('l, j \d\e F')) }}</p>
+            <a href="{{ route('notifications') }}" wire:navigate class="tap relative -mr-2 rounded-full p-2 text-ink-soft hover:bg-sheet-2 lg:hidden" aria-label="Notificações">
+                <x-icon name="bell" class="size-6" />
+                @if ($unread > 0)<span class="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-pen px-1 text-[10px] font-bold text-white dark:text-[#14161c]">{{ $unread }}</span>@endif
+            </a>
+        </div>
         <h1 class="mt-1 text-3xl font-bold lg:text-4xl">{{ $greeting }}, <span class="highlight">{{ $user->firstName() }}</span></h1>
     </header>
 
@@ -59,6 +65,16 @@
             <span class="pointer-events-none absolute -bottom-6 -right-6 size-28 rounded-full bg-marker/25"></span>
         </a>
     </div>
+
+    @if (! $hasPush)
+        <div x-data="{ hidden: (() => { try { return localStorage.getItem('estudy.pushInvite') === '0' } catch (e) { return false } })() }" x-show="!hidden" x-cloak
+             class="flex items-center gap-3 rounded-2xl border border-dashed border-pen/40 bg-pen-soft/40 p-4">
+            <x-icon name="bell" class="size-6 shrink-0 text-pen" />
+            <p class="min-w-0 flex-1 text-sm"><strong>Ative os lembretes</strong> para não esquecer de estudar, revisar e entregar trabalhos.</p>
+            <a href="{{ route('notifications') }}" wire:navigate class="tap shrink-0 rounded-xl bg-pen px-3 py-2 text-sm font-semibold text-white dark:text-[#14161c]">Ativar</a>
+            <button type="button" @click="hidden = true; try { localStorage.setItem('estudy.pushInvite', '0') } catch (e) {}" class="tap shrink-0 rounded-lg p-1 text-ink-soft" aria-label="Dispensar"><x-icon name="x" class="size-4" /></button>
+        </div>
+    @endif
 
     <div class="-mt-4 flex justify-end gap-4 text-sm font-semibold">
         <a href="{{ route('sessions') }}" wire:navigate class="text-ink-soft hover:text-ink">Histórico</a>

@@ -19,6 +19,7 @@
         <x-ui.card class="divide-y divide-rule">
             <x-ui.list-item icon="clock" label="Sessões de estudo" description="Histórico e registros manuais" :href="route('sessions')" />
             <x-ui.list-item icon="cycle" label="Ciclo de estudos" description="Rodízio de disciplinas com tempo-alvo" :href="route('cycle')" />
+            <x-ui.list-item icon="bell" label="Notificações" description="Lembretes, revisões e prazos" :href="route('notifications')" />
             <x-ui.list-item icon="sliders" label="Configurações de estudo" description="Metas, dias de estudo, Pomodoro" :href="route('settings')" />
             <x-ui.list-item icon="calendar" label="Agenda e notas" description="Provas, trabalhos, entregas e médias" :href="route('agenda')" />
             <x-ui.list-item icon="chart" label="Estatísticas" description="Tempo, rendimento, acertos e dificuldades" :href="route('stats')" />

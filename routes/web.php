@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FormationController;
+use App\Http\Controllers\PushSubscriptionController;
 use App\Http\Controllers\ServiceWorkerController;
 use App\Http\Middleware\EnsureOnboarded;
 use App\Livewire;
@@ -22,6 +23,9 @@ Route::middleware(['auth', EnsureOnboarded::class])->group(function () {
     Route::get('/ciclo', Livewire\Cycle::class)->name('cycle');
     Route::get('/agenda', Livewire\Agenda::class)->name('agenda');
     Route::get('/estatisticas', Livewire\Stats::class)->name('stats');
+    Route::get('/notificacoes', Livewire\Notifications::class)->name('notifications');
+    Route::post('/push/assinar', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
+    Route::post('/push/cancelar', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
     Route::get('/formacao', Livewire\Formation::class)->name('formation');
     Route::get('/formacao/formacao.csv', [FormationController::class, 'csv'])->name('formation.csv');
     Route::get('/formacao/certificado/{course}', [FormationController::class, 'certificate'])->name('formation.certificate');
