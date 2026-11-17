@@ -8,7 +8,7 @@ Mais leve que o Financee: sem chart.js (gráficos SVG no Blade), sem dompdf, sem
 Idioma do app, commits e conversa: **português do Brasil**.
 
 ## Status
-Etapas 0 a 3 concluídas (17/11/2026): deploy, login/onboarding, app shell, tema, PWA, cursos/disciplinas/tópicos ("colar lista"), cronômetro/modo foco/Pomodoro, sessões, revisões espaçadas, metas/sequência/sugestões, ciclo de estudos, agenda/notas, estatísticas, histórico de formação e notificações push. Próxima: Etapa 9 (exportação, polimento e go-live). Plano: `docs/plano-geral.md`.
+Versão 1.0 (17/11/2026): etapas 0–9 concluídas e em produção. Operação em `docs/go-live.md`; outro computador em `docs/desenvolvimento.md`. Demo local: `php artisan migrate --seed` → demo@estudy.test / demo12345. Plano: `docs/plano-geral.md`.
 
 ## Fluxo de trabalho
 - Antes de publicar: `php artisan test`, `./vendor/bin/phpstan analyse --memory-limit=1G`, `./vendor/bin/pint`.
