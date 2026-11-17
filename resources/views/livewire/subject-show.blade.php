@@ -19,7 +19,7 @@
             <p class="font-display text-lg font-bold">{{ $stats['done'] }} de {{ $stats['total'] }} tópicos</p>
             <p class="text-sm text-ink-soft">{{ $stats['total'] - $stats['done'] }} {{ $stats['total'] - $stats['done'] === 1 ? 'falta' : 'faltam' }} para concluir</p>
         </div>
-        <x-ui.button :href="route('study')" icon="play" class="!px-4 !py-2.5">Estudar</x-ui.button>
+        <x-ui.button :href="route('study', ['disciplina' => $subject->id])" icon="play" class="!px-4 !py-2.5">Estudar</x-ui.button>
     </div>
     @if ($subject->notes)
         <p class="mt-3 whitespace-pre-line rounded-2xl bg-sheet-2 px-4 py-3 text-sm text-ink-soft">{{ $subject->notes }}</p>
@@ -106,6 +106,33 @@
         @error('newTopic') <p class="text-sm text-late">{{ $message }}</p> @enderror
     </section>
 
+    {{-- Sessões --}}
+    <section class="mt-8 space-y-3">
+        <div class="flex items-end justify-between gap-3">
+            <h2 class="text-lg font-bold"><span class="highlight">Sessões</span></h2>
+            <button type="button" @click="$dispatch('log-session', { subjectId: {{ $subject->id }} })" class="tap flex items-center gap-1 text-sm font-semibold text-pen">
+                <x-icon name="plus" class="size-4" /> Registrar
+            </button>
+        </div>
+        @if ($sessionCount === 0)
+            <p class="rounded-2xl bg-sheet-2 px-4 py-4 text-sm text-ink-soft">Nenhum estudo registrado ainda. Dê o play quando começar!</p>
+        @else
+            <p class="text-sm text-ink-soft"><strong class="font-display text-base text-ink">{{ \App\Support\Duration::human($sessionTotal) }}</strong> em {{ $sessionCount }} {{ $sessionCount === 1 ? 'sessão' : 'sessões' }}</p>
+            <x-ui.card class="divide-y divide-rule">
+                @foreach ($recentSessions as $s)
+                    <button type="button" wire:key="ss-{{ $s->id }}" @click="$dispatch('log-session', { id: {{ $s->id }} })" class="tap flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-sheet-2">
+                        <x-icon :name="$s->kindIcon()" class="text-ink-soft" />
+                        <span class="min-w-0 flex-1">
+                            <span class="block truncate text-sm font-semibold">{{ $s->topic?->title ?? $s->kindLabel() }}</span>
+                            <span class="block text-xs text-ink-soft">{{ $s->date->isToday() ? 'Hoje' : ($s->date->isYesterday() ? 'Ontem' : $s->date->format('d/m')) }}{{ $s->started_at ? ' às '.$s->started_at->format('H:i') : '' }}</span>
+                        </span>
+                        <span class="font-display font-bold">{{ \App\Support\Duration::human($s->duration_seconds) }}</span>
+                    </button>
+                @endforeach
+            </x-ui.card>
+        @endif
+    </section>
+
     <div class="mt-10 border-t border-rule pt-6">
         <button type="button" @click="$dispatch('open-sheet', 'delete-subject')" class="tap flex items-center gap-2 text-sm font-semibold text-late">
             <x-icon name="trash" class="size-4" /> {{ $isDisc ? 'Excluir disciplina' : 'Excluir módulo' }}
@@ -151,6 +178,9 @@
                 <x-ui.input label="Link do material" name="topicUrl" type="url" inputmode="url" wire:model="topicUrl" placeholder="https://" />
             </div>
             <x-ui.textarea label="Anotações" name="topicNotes" wire:model="topicNotes" rows="5" placeholder="Resumo, dúvidas, fórmulas, páginas..." />
+            @if ($topicId)
+                <x-ui.button :href="route('study', ['topico' => $topicId])" variant="marker" icon="play" class="w-full">Estudar este tópico</x-ui.button>
+            @endif
             <div class="flex gap-2">
                 <x-ui.button type="button" variant="secondary" icon="trash" wire:click="deleteTopic" wire:confirm="Excluir este tópico?" class="!text-late" aria-label="Excluir tópico" />
                 <x-ui.button class="flex-1" icon="check">Salvar</x-ui.button>

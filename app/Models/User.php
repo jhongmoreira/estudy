@@ -31,6 +31,7 @@ class User extends Authenticatable
         'streak_min' => 15,               // mínimo para o dia contar na sequência
         'study_days' => [1, 2, 3, 4, 5, 6], // 0 = domingo
         'week_starts_on' => 1,            // 0 = domingo, 1 = segunda
+        'pomodoro' => ['focus' => 25, 'short' => 5, 'long' => 15, 'every' => 4], // minutos; pausa longa a cada N focos
     ];
 
     public const THEMES = ['system', 'light', 'dark'];
@@ -110,6 +111,19 @@ class User extends Authenticatable
     public function studiesOn(\DateTimeInterface $date): bool
     {
         return in_array((int) $date->format('w'), $this->studyDays(), true);
+    }
+
+    /** @return array{focus: int, short: int, long: int, every: int} */
+    public function pomodoro(): array
+    {
+        $p = (array) $this->setting('pomodoro') + self::DEFAULT_SETTINGS['pomodoro'];
+
+        return [
+            'focus' => max(5, min(120, (int) $p['focus'])),
+            'short' => max(1, min(30, (int) $p['short'])),
+            'long' => max(5, min(60, (int) $p['long'])),
+            'every' => max(2, min(8, (int) $p['every'])),
+        ];
     }
 
     public function weekStartsOn(): int

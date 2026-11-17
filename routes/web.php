@@ -16,6 +16,8 @@ Route::middleware(['auth', EnsureOnboarded::class])->group(function () {
     Route::get('/disciplinas/{subject}', Livewire\SubjectShow::class)->name('subjects.show');
     Route::get('/buscar', Livewire\Search::class)->name('search');
     Route::get('/estudar', Livewire\Study::class)->name('study');
+    Route::get('/estudar/foco', Livewire\Focus::class)->name('focus');
+    Route::get('/sessoes', Livewire\Sessions::class)->name('sessions');
     Route::get('/revisoes', Livewire\Reviews::class)->name('reviews');
     Route::get('/mais', Livewire\More::class)->name('more');
     Route::get('/perfil', Livewire\Profile::class)->name('profile');
