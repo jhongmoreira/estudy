@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FormationController;
 use App\Http\Controllers\ServiceWorkerController;
 use App\Http\Middleware\EnsureOnboarded;
 use App\Livewire;
@@ -20,6 +21,10 @@ Route::middleware(['auth', EnsureOnboarded::class])->group(function () {
     Route::get('/sessoes', Livewire\Sessions::class)->name('sessions');
     Route::get('/ciclo', Livewire\Cycle::class)->name('cycle');
     Route::get('/agenda', Livewire\Agenda::class)->name('agenda');
+    Route::get('/estatisticas', Livewire\Stats::class)->name('stats');
+    Route::get('/formacao', Livewire\Formation::class)->name('formation');
+    Route::get('/formacao/formacao.csv', [FormationController::class, 'csv'])->name('formation.csv');
+    Route::get('/formacao/certificado/{course}', [FormationController::class, 'certificate'])->name('formation.certificate');
     Route::get('/revisoes', Livewire\Reviews::class)->name('reviews');
     Route::get('/mais', Livewire\More::class)->name('more');
     Route::get('/perfil', Livewire\Profile::class)->name('profile');

@@ -137,3 +137,10 @@ input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+/* Impressão (histórico de formação etc.): só o conteúdo, sem menus */
+@media print {
+    nav, aside, [aria-label='Navegação principal'], .print\:hidden { display: none !important; }
+    body { background: #fff !important; color: #000 !important; }
+    main { padding: 0 !important; max-width: none !important; }
+}
