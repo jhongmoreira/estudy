@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 /**
  * @property int $id
@@ -22,7 +23,7 @@ use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, HasPushSubscriptions, Notifiable;
 
     /** Preferências padrão (coluna JSON "settings"). Ver docs/especificacao.md §2. */
     public const DEFAULT_SETTINGS = [
@@ -35,6 +36,7 @@ class User extends Authenticatable
         'review_intervals' => [1, 7, 30], // dias entre as revisões
         'reviews_auto' => true,           // agendar revisões ao estudar um tópico
         'reviews_per_day' => 5,           // limite ao reagendar atrasadas
+        'reminder_time' => '19:00',       // lembrete diário (null = desligado)
     ];
 
     public const THEMES = ['system', 'light', 'dark'];
@@ -127,6 +129,19 @@ class User extends Authenticatable
             'long' => max(5, min(60, (int) $p['long'])),
             'every' => max(2, min(8, (int) $p['every'])),
         ];
+    }
+
+    /** Tipos de aviso: chave => [título, descrição]. Todos ligados por padrão. */
+    public const NOTIFICATION_TYPES = [
+        'daily' => ['Lembrete diário', 'No horário escolhido, nos dias de estudo, se a meta ainda não foi batida.'],
+        'reviews' => ['Revisões do dia', 'De manhã (8h), quando houver revisões para hoje.'],
+        'agenda' => ['Provas e entregas', 'Na véspera (19h) e no dia (8h).'],
+        'streak' => ['Sequência em risco', 'Às 21h, se você tem 3+ dias seguidos e ainda não estudou o mínimo hoje.'],
+    ];
+
+    public function wantsNotification(string $type): bool
+    {
+        return (bool) Arr::get($this->settings ?? [], 'notifications.'.$type, true);
     }
 
     /** @return list<int> */

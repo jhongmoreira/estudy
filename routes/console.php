@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
@@ -30,3 +31,10 @@ Artisan::command('app:db-maintenance {--vacuum}', function () {
 
 Schedule::command('app:db-maintenance')->weeklyOn(0, '04:00')->withoutOverlapping();
 Schedule::command('app:db-maintenance --vacuum')->monthlyOn(1, '04:30')->withoutOverlapping();
+
+// Avisos (push + central no app): lembrete diário, revisões, agenda e sequência. Cada aviso sai uma vez por dia.
+Artisan::command('notifications:dispatch', function (NotificationService $service) {
+    $this->info($service->dispatchDue().' aviso(s) enviado(s).');
+})->purpose('Envia os avisos de estudo do horário atual');
+
+Schedule::command('notifications:dispatch')->everyFifteenMinutes()->withoutOverlapping();

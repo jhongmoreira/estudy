@@ -61,6 +61,8 @@ class Today extends Component
             'dueCount' => Review::due()->count(),
             'agenda' => AgendaItem::with(['course', 'subject'])->where('status', 'open')
                 ->where('due_on', '<=', $now->addDays(7)->toDateString())->orderBy('due_on')->limit(5)->get(),
+            'unread' => $user->unreadNotifications()->count(),
+            'hasPush' => $user->pushSubscriptions()->exists(),
             'courses' => $courses,
             'courseStats' => $progress->forCourses($courses),
             'courseWeek' => $goals->weekByCourse($week),
