@@ -57,6 +57,9 @@ self.addEventListener('push', (event) => {
         badge: payload.badge || '/icons/favicon-32.png',
         tag: payload.tag || undefined,
         renotify: !!payload.tag,
+        // Alarme do Pomodoro: vibra forte e fica na tela até ser tocado
+        vibrate: payload.tag === 'estudy-timer' ? [400, 150, 400, 150, 400] : undefined,
+        requireInteraction: payload.tag === 'estudy-timer',
         data: { url: (payload.data && payload.data.url) || payload.url || '/' },
     }));
 });

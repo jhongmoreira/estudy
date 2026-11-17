@@ -28,6 +28,8 @@ class Settings extends Component
 
     public bool $reviews_auto = true;
 
+    public bool $timer_sound = true;
+
     public int $reviews_per_day = 5;
 
     public function mount(): void
@@ -40,6 +42,7 @@ class Settings extends Component
         $this->pomodoro = $user->pomodoro();
         $this->review_intervals = implode(', ', $user->reviewIntervals());
         $this->reviews_auto = (bool) $user->setting('reviews_auto');
+        $this->timer_sound = (bool) $user->setting('timer_sound');
         $this->reviews_per_day = (int) $user->setting('reviews_per_day');
     }
 
@@ -77,6 +80,7 @@ class Settings extends Component
             'pomodoro.long' => ['required', 'integer', 'min:5', 'max:60'],
             'pomodoro.every' => ['required', 'integer', 'min:2', 'max:8'],
             'reviews_auto' => ['boolean'],
+            'timer_sound' => ['boolean'],
             'reviews_per_day' => ['required', 'integer', 'min:1', 'max:50'],
         ], attributes: [
             'daily_goal_min' => 'meta diária',
