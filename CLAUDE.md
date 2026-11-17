@@ -4,11 +4,11 @@ PWA de organização de estudos pessoais (autodidata, cursos livres, extensão, 
 o usuário cadastra os próprios cursos, disciplinas/módulos e tópicos.
 Destino: https://estudy.jgmoreira.com.br (Hostoo, mesma conta e mesmo fluxo do Financee em `~/financee`).
 Laravel 12 · PHP 8.4 · Livewire 3 + Alpine · Tailwind 4 · SQLite · Pest · Larastan. **Sem Docker.**
-Mais leve que o Financee: sem chart.js (gráficos SVG no Blade), sem dompdf, sem intervention/image, sem pacote de ícones (sprite próprio).
+Mais leve que o Financee: sem chart.js (gráficos SVG no Blade), sem dompdf, sem intervention/image, sem pacote de ícones (ícones inline em `App\Support\Icons`).
 Idioma do app, commits e conversa: **português do Brasil**.
 
 ## Status
-Etapa 0 concluída (17/11/2026): Laravel no ar com deploy automático. Próxima: Etapa 1 (fundação). Plano: `docs/plano-geral.md`.
+Etapas 0 e 1 concluídas (17/11/2026): deploy automático, login/cadastro, onboarding, app shell, tema e PWA. Próxima: Etapa 2 (cursos, disciplinas e tópicos). Plano: `docs/plano-geral.md`.
 
 ## Fluxo de trabalho
 - Antes de publicar: `php artisan test`, `./vendor/bin/phpstan analyse --memory-limit=1G`, `./vendor/bin/pint`.
@@ -17,6 +17,12 @@ Etapa 0 concluída (17/11/2026): Laravel no ar com deploy automático. Próxima:
 - Servidor: código em `~/public_html/estudy` (não editar lá); `.env`/banco/storage em `~/estudy-data`.
 - PHP local: `export PATH="$HOME/.config/herd-lite/bin:$PATH"` se `php` não for encontrado.
 - Ao copiar algo do Financee, adaptar nomes (`financee-data` → `estudy-data`) e **não** copiar o visual.
+
+## UI (não copiar o Financee)
+- Tokens em `resources/css/app.css` (`bg-paper`, `bg-sheet`, `text-ink`, `text-pen`, `bg-marker`...); utilitários `highlight` (marca-texto) e `ruled` (pauta).
+- Componentes em `resources/views/components/ui/` (sheet, card com `stripe`, ring, progress, day-picker, segmented, list-item, empty, page-header...). Catálogo em `/_ui` (só local).
+- Ícones: `<x-icon name="..."/>` com os traços em `App\Support\Icons` (Lucide). Precisa de um novo? Adicione o path lá.
+- Usuários de teste locais: `demo@estudy.test` / `novo@estudy.test` (senha `demo12345`).
 
 ## Regras do domínio (não quebrar)
 - Durações em **segundos (int)**; datas `AAAA-MM-DD` (cast `DateOnly`); "dia" no fuso `America/Sao_Paulo`; sessão que cruza meia-noite fica no dia de início.
