@@ -1,0 +1,41 @@
+# Etapa 3 — Cronômetro, modo foco e sessões de estudo
+
+Tabelas: `active_timers`, `study_sessions`. Regras em [especificacao.md §3.2–3.3](../especificacao.md).
+
+## 3.1 Iniciar (`/estudar`)
+- Sheet/página de seleção: "Continuar" (última disciplina/tópico), disciplinas dos cursos ativos (com cor), busca; tópico opcional; tipo de estudo (teoria, videoaula, aula, exercícios, revisão, prática, escrita) — padrão = último usado na disciplina.
+- Botão **Começar** → cria `active_timers` e abre o modo foco.
+- Atalhos para iniciar a partir de: card da disciplina, tópico, sugestões da Hoje, atalho do PWA.
+
+## 3.2 Modo foco (`/estudar/foco`)
+- Anel SVG grande + tempo `HH:MM:SS` (Alpine `requestAnimationFrame`/`setInterval` 1 s, calculado a partir de `started_at`/`paused_seconds` vindos do servidor).
+- Ações: **Pausar/Retomar**, **Encerrar**, trocar tópico, anotar (rascunho salvo junto do timer).
+- **Wake Lock API** (tela ligada, se suportado); `document.title` mostra o tempo; ao voltar ao app o relógio se recalcula.
+- **Pomodoro** (se ativo): fases foco/pausa curta/pausa longa; troca de fase com vibração, som curto e `Notification` local; durante a pausa o tempo líquido não avança; opção "pular pausa".
+- Sem rede: relógio continua; ações ficam numa fila Alpine e são reenviadas (`wire:offline` mostra aviso discreto).
+
+## 3.3 Barra persistente
+- Quando há timer, a barra acima da bottom nav aparece em todas as telas (`@persist`): ponto na cor da disciplina, nome, tempo, ⏸ e ■. Toque → modo foco.
+- Outro aparelho: ao abrir o app, o timer em andamento aparece (estado vem do servidor).
+
+## 3.4 Encerrar → folha "Como foi?"
+- Duração líquida (editável), tipo, tópico, páginas, questões (acertos/total, com %), notas, ☐ "Marcar tópico como concluído".
+- Aviso de "esqueceu ligado?" após 4 h; descartar sessões < 1 min.
+- Salvar → `SessionService::record()` (transação): cria sessão, remove timer, atualiza status do tópico, dispara evento `SessionRecorded` (revisões na etapa 4, ciclo/constância na etapa 5).
+
+## 3.5 Registro manual
+- Toque longo no ▶ ou botão "Registrar estudo": mesmo formulário + data (≤ hoje) e duração com atalhos (15/30/45/60/90 min) ou horário início–fim.
+
+## 3.6 Histórico (`/sessoes`)
+- Agrupado por dia, com total do dia; filtros (curso, disciplina, tipo, período); total do filtro.
+- Editar/excluir sessão (sheet). Seções "Sessões recentes" na disciplina e no curso passam a funcionar.
+
+## 3.7 Services
+- `TimerService`: start (falha se já existe — oferece encerrar o atual), pause, resume, elapsed, stop → dados para a folha.
+- `SessionService`: record, update, delete; validações (60 s–12 h, data ≤ hoje, acertos ≤ total, disciplina/tópico do mesmo usuário e coerentes).
+
+## Testes
+Cálculo do decorrido com pausas (Carbon `setTestNow`); timer único por usuário; Pomodoro não conta pausas; sessão que cruza meia-noite; 4 h de alerta; manual no passado/futuro; status do tópico; isolamento.
+
+## Critério de pronto
+Inicio o cronômetro no celular, fecho o app, abro no computador e o tempo está certo; encerro, preencho páginas e a sessão aparece no histórico.
