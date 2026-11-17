@@ -101,6 +101,7 @@
     <livewire:subject-form />
     <livewire:paste-list />
     <livewire:session-form />
+    <livewire:agenda-form />
 
     <x-ui.timer-bar />
 

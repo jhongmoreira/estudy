@@ -97,6 +97,14 @@
         </x-ui.section>
     @endif
 
+    @if ($agenda->isNotEmpty())
+        <x-ui.section title="Próximos prazos" action="Agenda" :action-href="route('agenda')">
+            <x-ui.card class="divide-y divide-rule">
+                @foreach ($agenda as $item) <x-ui.agenda-row :item="$item" :toggle="false" /> @endforeach
+            </x-ui.card>
+        </x-ui.section>
+    @endif
+
     {{-- Semana + constância --}}
     <x-ui.section title="Sua semana">
         <x-ui.card class="p-4">

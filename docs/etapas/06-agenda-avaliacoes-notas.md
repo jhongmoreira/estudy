@@ -1,6 +1,9 @@
 # Etapa 6 — Agenda: avaliações, entregas e notas
 
-Tabela `agenda_items`. Regras em [especificacao.md §3.8](../especificacao.md). Pensada para graduação, pós e cursos com prazos, mas útil para qualquer curso (ex.: "terminar módulo 3 até 30/11").
+Tabela `agenda_items`. Regras em [especificacao.md §3.8](../especificacao.md).
+
+> **Status (17/11/2026):** implementada. Lançar nota marca o item como feito. "Quanto falta" = média necessária (0–10) nos itens
+> ainda sem nota, ponderada pelos pesos. Formulário único `AgendaForm` no layout (`$dispatch('edit-agenda', {id, courseId, subjectId})`, dispara `agenda-saved`). Pensada para graduação, pós e cursos com prazos, mas útil para qualquer curso (ex.: "terminar módulo 3 até 30/11").
 
 ## 6.1 Agenda (`/agenda`)
 - Lista por data (Atrasados · Esta semana · Próximos · Concluídos) e **visão de mês** (grade simples com pontos na cor da disciplina).

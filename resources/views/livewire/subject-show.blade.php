@@ -106,6 +106,51 @@
         @error('newTopic') <p class="text-sm text-late">{{ $message }}</p> @enderror
     </section>
 
+    {{-- Avaliações, entregas e média --}}
+    <section class="mt-8 space-y-3">
+        <div class="flex items-end justify-between gap-3">
+            <h2 class="text-lg font-bold"><span class="highlight">Avaliações e prazos</span></h2>
+            <button type="button" @click="$dispatch('edit-agenda', { subjectId: {{ $subject->id }} })" class="tap flex items-center gap-1 text-sm font-semibold text-pen">
+                <x-icon name="plus" class="size-4" /> Adicionar
+            </button>
+        </div>
+        @if ($agendaItems->isEmpty())
+            <p class="rounded-2xl bg-sheet-2 px-4 py-4 text-sm text-ink-soft">Nenhuma prova, trabalho ou entrega cadastrada.</p>
+        @else
+            @if ($grades['average'] !== null || $grades['needed'] !== null)
+                @php
+                    $tone = ['approved' => 'bg-done/15 text-done', 'on_track' => 'bg-pen-soft text-pen', 'at_risk' => 'bg-marker/30 text-marker-ink', 'impossible' => 'bg-late/10 text-late'][$grades['status']] ?? 'bg-sheet-2 text-ink';
+                    $fmt = fn ($v) => rtrim(rtrim(number_format((float) $v, 2, ',', ''), '0'), ',');
+                @endphp
+                <div class="flex flex-wrap items-center gap-3 rounded-2xl border border-rule bg-sheet p-4">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wide text-ink-soft">Média atual</p>
+                        <p class="font-display text-3xl font-bold">{{ $grades['average'] !== null ? $fmt($grades['average']) : '—' }}</p>
+                    </div>
+                    @if ($subject->passing_grade !== null)
+                        <div class="ml-auto rounded-xl px-3 py-2 text-sm font-semibold {{ $tone }}">
+                            @switch($grades['status'])
+                                @case('approved') Aprovado(a)! Média mínima {{ $fmt($subject->passing_grade) }} garantida. @break
+                                @case('impossible') Não dá mais para chegar a {{ $fmt($subject->passing_grade) }} nas avaliações restantes. @break
+                                @default
+                                    @if ($grades['needed'] !== null)
+                                        Precisa de {{ $fmt($grades['needed']) }} (de 10) em média no que falta para fechar {{ $fmt($subject->passing_grade) }}.
+                                    @else
+                                        Abaixo da média mínima ({{ $fmt($subject->passing_grade) }}).
+                                    @endif
+                            @endswitch
+                        </div>
+                    @else
+                        <p class="ml-auto text-xs text-ink-soft">Defina a média para aprovação na edição da disciplina.</p>
+                    @endif
+                </div>
+            @endif
+            <x-ui.card class="divide-y divide-rule">
+                @foreach ($agendaItems as $item) <x-ui.agenda-row :item="$item" :toggle="false" :show-course="false" /> @endforeach
+            </x-ui.card>
+        @endif
+    </section>
+
     {{-- Sessões --}}
     <section class="mt-8 space-y-3">
         <div class="flex items-end justify-between gap-3">

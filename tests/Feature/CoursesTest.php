@@ -209,10 +209,10 @@ it('busca cursos, disciplinas e tópicos', function () {
 });
 
 it('mostra cursos em andamento na tela Hoje', function () {
-    makeCourse(['name' => 'Curso Ativo']);
-    makeCourse(['name' => 'Curso Pausado', 'status' => 'paused']);
+    $active = makeCourse(['name' => 'Curso Ativo']);
+    $paused = makeCourse(['name' => 'Curso Pausado', 'status' => 'paused']);
 
-    $this->get('/')->assertSee('Curso Ativo')->assertDontSee('Curso Pausado');
+    $this->get('/')->assertSee(route('courses.show', $active))->assertDontSee(route('courses.show', $paused));
 });
 
 it('cria os cursos informados no onboarding', function () {
