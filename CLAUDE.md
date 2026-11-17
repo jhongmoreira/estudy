@@ -8,7 +8,7 @@ Mais leve que o Financee: sem chart.js (gráficos SVG no Blade), sem dompdf, sem
 Idioma do app, commits e conversa: **português do Brasil**.
 
 ## Status
-Etapas 0 e 1 concluídas (17/11/2026): deploy automático, login/cadastro, onboarding, app shell, tema e PWA. Próxima: Etapa 2 (cursos, disciplinas e tópicos). Plano: `docs/plano-geral.md`.
+Etapas 0 a 2 concluídas (17/11/2026): deploy, login/onboarding, app shell, tema, PWA, cursos/disciplinas/tópicos com "colar lista". Próxima: Etapa 3 (cronômetro e sessões). Plano: `docs/plano-geral.md`.
 
 ## Fluxo de trabalho
 - Antes de publicar: `php artisan test`, `./vendor/bin/phpstan analyse --memory-limit=1G`, `./vendor/bin/pint`.
@@ -22,6 +22,9 @@ Etapas 0 e 1 concluídas (17/11/2026): deploy automático, login/cadastro, onboa
 - Tokens em `resources/css/app.css` (`bg-paper`, `bg-sheet`, `text-ink`, `text-pen`, `bg-marker`...); utilitários `highlight` (marca-texto) e `ruled` (pauta).
 - Componentes em `resources/views/components/ui/` (sheet, card com `stripe`, ring, progress, day-picker, segmented, list-item, empty, page-header...). Catálogo em `/_ui` (só local).
 - Ícones: `<x-icon name="..."/>` com os traços em `App\Support\Icons` (Lucide). Precisa de um novo? Adicione o path lá.
+- Folhas globais (no layout): `$dispatch('edit-course', {id})`, `$dispatch('edit-subject', {courseId, id})`, `$dispatch('paste-list', {courseId, subjectId})`; ao salvar disparam `course-saved`/`subject-saved`.
+- Depois de criar views novas, rode `npm run build` antes de conferir no navegador (classes Tailwind novas).
+- Itens de grid/flex com texto `truncate` precisam de `min-w-0` (senão a página estoura a largura no celular).
 - Usuários de teste locais: `demo@estudy.test` / `novo@estudy.test` (senha `demo12345`).
 
 ## Regras do domínio (não quebrar)

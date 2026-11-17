@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Support\Palette;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
@@ -61,6 +62,12 @@ class User extends Authenticatable
             'password' => 'hashed',
             'settings' => 'array',
         ];
+    }
+
+    /** @return HasMany<Course, $this> */
+    public function courses(): HasMany
+    {
+        return $this->hasMany(Course::class);
     }
 
     public function setting(string $key): mixed

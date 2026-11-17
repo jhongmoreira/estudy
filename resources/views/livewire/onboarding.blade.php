@@ -5,14 +5,45 @@
     </div>
 
     <div class="mt-6 flex gap-2" aria-hidden="true">
-        @foreach ([1, 2] as $s)
+        @foreach (range(1, \App\Livewire\Onboarding::STEPS) as $s)
             <span @class(['h-1.5 flex-1 rounded-full', 'bg-pen' => $step >= $s, 'bg-rule' => $step < $s])></span>
         @endforeach
     </div>
 
+    <p class="mt-10 text-sm font-semibold uppercase tracking-wide text-pen">Passo {{ $step }} de {{ \App\Livewire\Onboarding::STEPS }}</p>
+
     @if ($step === 1)
-        <div class="mt-10 flex-1">
-            <p class="text-sm font-semibold uppercase tracking-wide text-pen">Passo 1 de 2</p>
+        <div class="flex-1">
+            <h1 class="mt-2 text-3xl font-bold">O que você está <span class="highlight">estudando?</span></h1>
+            <p class="mt-2 text-ink-soft">Cadastre um ou mais cursos. Depois você adiciona as disciplinas ou módulos e os tópicos.</p>
+
+            <div class="mt-6 space-y-3">
+                @foreach ($courses as $i => $item)
+                    <div class="rounded-2xl border border-rule bg-sheet p-3" wire:key="onb-course-{{ $i }}">
+                        <div class="flex gap-2">
+                            <select wire:model="courses.{{ $i }}.type" aria-label="Tipo" class="w-40 shrink-0 rounded-xl border-2 border-rule bg-sheet px-2 py-2.5 text-sm font-semibold outline-none focus:border-pen">
+                                @foreach (\App\Models\Course::TYPES as $key => [$label])
+                                    <option value="{{ $key }}">{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @if (count($courses) > 1)
+                                <button type="button" wire:click="removeCourse({{ $i }})" class="tap ml-auto rounded-xl p-2 text-ink-soft hover:bg-sheet-2" aria-label="Remover"><x-icon name="x" /></button>
+                            @endif
+                        </div>
+                        <input type="text" wire:model="courses.{{ $i }}.name" maxlength="120" aria-label="Nome do curso"
+                               placeholder="{{ ['Ex.: Engenharia de Software', 'Ex.: Inglês avançado', 'Ex.: Livro “Hábitos Atômicos”'][$i % 3] }}"
+                               class="mt-2 block w-full rounded-xl border-2 border-rule bg-sheet px-4 py-3 outline-none focus:border-pen">
+                    </div>
+                @endforeach
+            </div>
+            @if (count($courses) < 6)
+                <button type="button" wire:click="addCourse" class="tap mt-3 flex items-center gap-2 text-sm font-semibold text-pen"><x-icon name="plus" class="size-4" /> Adicionar outro</button>
+            @endif
+        </div>
+
+        <x-ui.button type="button" wire:click="next" class="mt-8 w-full">Continuar</x-ui.button>
+    @elseif ($step === 2)
+        <div class="flex-1">
             <h1 class="mt-2 text-3xl font-bold">Quanto você quer <span class="highlight">estudar por dia?</span></h1>
             <p class="mt-2 text-ink-soft">Uma meta realista vale mais que uma meta heroica. Dá para mudar quando quiser.</p>
 
@@ -32,10 +63,12 @@
             </div>
         </div>
 
-        <x-ui.button type="button" wire:click="next" class="mt-8 w-full">Continuar</x-ui.button>
+        <div class="mt-8 grid grid-cols-[auto_1fr] gap-3">
+            <x-ui.button type="button" variant="secondary" wire:click="back" icon="chevron-left" aria-label="Voltar" />
+            <x-ui.button type="button" wire:click="next">Continuar</x-ui.button>
+        </div>
     @else
-        <div class="mt-10 flex-1">
-            <p class="text-sm font-semibold uppercase tracking-wide text-pen">Passo 2 de 2</p>
+        <div class="flex-1">
             <h1 class="mt-2 text-3xl font-bold">Em quais dias <span class="highlight">você estuda?</span></h1>
             <p class="mt-2 text-ink-soft">Nos dias de folga não agendamos revisões e sua sequência não quebra.</p>
 
